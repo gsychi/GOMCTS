@@ -25,8 +25,8 @@ def numberToState(number):
     for x in range(19-length):
         number='0'+number
     number=str(number)
-    stateX=np.zeros((3,3))
-    stateO=np.zeros((3,3))
+    stateX=np.ndarray((3,3))
+    stateO=np.ndarray((3,3))
     turn=0
     for x in range(18):
         matrix=x%9 #Tells whether to look at matrix X or matrix O
