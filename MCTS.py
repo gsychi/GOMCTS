@@ -1,10 +1,5 @@
 import numpy as np
 
-# in this code, a list will be used to store each position.
-# [0,0,0,0,0,0,0,0,0]
-# -> this corresponds to 2 arrays for wins and number of times visited]
-# -> then each position has a value for the # of times it is visited = parent node N value
-
 class MonteCarlo():
 
     # We will use three lists:
@@ -15,10 +10,26 @@ class MonteCarlo():
     # This is helpful because we get to use numpy stuffs.
 
     def __init__(self):
-        self.gameStates = {} # This is a dictionary. Information will be updated as playouts start. [
+
+
+        # This is a dictionary. Information will be updated as playouts start. ['stateToString': 0]
+        # 0 corresponds to position 0 on all the other arrays, 1 corresponds to position 1...hmmm.
+        self.gameStates = {}
+
         self.childrenStatesSeen = np.zeros((1, 9)) #This is a 2D array
         self.childrenStatesWin = np.zeros((1, 9)) #This is a 2D array
         self.childrenNNEvaluation = np.zeros((1, 9)) #This is a 2D array
+
+    def simulation(self):
+        # We store the information in the simulation in a temporary array, before adding everything to the database.
+
+        statesExplored = np.zeros((1)) #Store it as an array of seen stuff
+        actionsDone = np.zeros((1))
+
+        #here we will assume that there is a legalMove function that works as followed:
+        #If the first row of a tic tac toe row is all taken, then it returns [0,0,0,1,1,1,1,1,1]
+
+    def chooseMove(self, ):
 
 
 # w stands for # of wins, n stands for number of times node has been visited.
