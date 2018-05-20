@@ -8,7 +8,7 @@ class TTTEnvironment:
         self.Xstate = np.zeros((3, 3))  # 0 if no X there, 1 if X there
         self.Ostate = np.zeros((3, 3))  # 0 if no O there, 0 it O there
         self.turn = 0  # 0 for X to move, 1 for O to move
-        self.state = Xstate, Ostate, turn
+        self.state = self.Xstate, self.Ostate, self.turn
 
     def stateToNumber(gameState):
         temp = gameState[0], gameState[1], gameState[2]
@@ -44,34 +44,34 @@ class TTTEnvironment:
         gameState = stateX, stateO, turn
         return (gameState)
 
-    def makeMove(position):
-        if turn == 0:
-            X_flat = self.Xstate.flatten
-            X_flat[position] = 1
+    def makeMove(self,i):
+        if self.turn == 0:
+            X_flat = self.Xstate.flatten()
+            X_flat[i] = 1
             self.Xstate = X_flat.reshape(3, 3)
 
         else:
-            Y_flat = self.Ystate.flatten
-            Y_flat[position] = 1
-            self.Ystate = Y_flat.reshape(3, 3)
+            O_flat = self.Ostate.flatten()
+            O_flat[i] = 1
+            self.Ostate = O_flat.reshape(3, 3)
 
-    def legalMove():
-        Board_State = (self.Xstate + self.Ostate).flatten
+    def legalMove(self):
+        Board_State = (self.Xstate + self.Ostate).flatten()
         return 1 - Board_State
 
-    def undoMove(position):
-        if turn == 0:
-            X_flat = self.Xstate.flatten
-            X_flat[position] = 0
+    def undoMove(self,i):
+        if self.turn == 0:
+            X_flat = self.Xstate.flatten()
+            X_flat[i] = 0
             self.Xstate = X_flat.reshape(3, 3)
 
         else:
-            Y_flat = self.Ystate.flatten
-            Y_flat[position] = 0
-            self.Ystate = Y_flat.reshape(3, 3)
+            O_flat = self.Ostate.flatten()
+            O_flat[i] = 0
+            self.Ostate = O_flat.reshape(3, 3)
 
-    def check_Win():
-        X_flat = self.Xstate.flatten
+    def check_Win(self):
+        X_flat = self.Xstate.flatten()
         for i in range(3):
             if X_flat[i * 3] == 1 and X_flat[i * 3 + 1] == 1 and X_flat[i * 3 + 2] == 1:
                 return 1
@@ -83,23 +83,33 @@ class TTTEnvironment:
             elif X_flat[2] == 1 and X_flat[4] == 1 and X_flat[6] == 1:
                 return 1
 
-        Y_flat = self.Ystate.flatten
+        O_flat = self.Ostate.flatten()
         for i in range(3):
-            if Y_flat[i * 3] == 1 and Y_flat[i * 3 + 1] == 1 and Y_flat[i * 3 + 2] == 1:
+            if O_flat[i * 3] == 1 and O_flat[i * 3 + 1] == 1 and O_flat[i * 3 + 2] == 1:
                 return -1
-            elif Y_flat[i] == 1 and Y_flat[i + 3] == 1 and Y_flat[i + 6] == 1:
-                return -1
-
-            if Y_flat[0] == 1 and Y_flat[4] == 1 and Y_flat[8] == 1:
-                return -1
-            elif Y_flat[2] == 1 and Y_flat[4] == 1 and Y_flat[6] == 1:
+            elif O_flat[i] == 1 and O_flat[i + 3] == 1 and O_flat[i + 6] == 1:
                 return -1
 
-        if np.sum(legalMove()) != 0:
+            if O_flat[0] == 1 and O_flat[4] == 1 and O_flat[8] == 1:
+                return -1
+            elif O_flat[2] == 1 and O_flat[4] == 1 and O_flat[6] == 1:
+                return -1
+
+        if np.sum(self.legalMove()) != 0:
             return 2
 
         return 0
 
-
-
-
+newenv = TTTEnvironment()
+print(newenv.legalMove())
+newenv.makeMove(0)
+print(newenv.Xstate)
+newenv.turn = 1
+newenv.makeMove(3)
+print(newenv.Xstate)
+print(newenv.Ostate)
+print(newenv.check_Win())
+newenv.turn = 0
+newenv.makeMove(1)
+newenv.makeMove(2)
+print(newenv.check_Win())
