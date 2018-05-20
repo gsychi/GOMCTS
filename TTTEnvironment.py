@@ -57,7 +57,16 @@ def legalMove():
     Board_State = (Xstate+Ostate).flatten
     return 1-Board_State
 
-def undoMove():
+def undoMove(position):
+    if turn==0:
+        X_flat = Xstate.flatten
+        X_flat[position] = 0
+        Xstate = X_flat.reshape(3,3)
+
+    else:
+        Y_flat = Ystate.flatten
+        Y_flat[position] = 0
+        Ystate = Y_flat.reshape(3, 3)
 
 def check_Win():
     X_flat = Xstate.flatten
