@@ -43,9 +43,7 @@ class MonteCarlo():
             if (turns % 2) == 1:
                 # change tic tac toe board
 
-
-
-    #choose max
+    #choose argmax per (P)UCT Algorithm
     def chooseMove(self, position, legalMoves):
         index = gameStates[position]  # This returns a number based on the library
 
@@ -71,6 +69,22 @@ def UCT_Algorithm(w, n, c, N, q, L):
 
     UCT = winRate + exploration
     return UCT * L
+
+#UCT Algorithm used by Alpha Zero
+def PUCT_Algorithm(w, n, c, N, q, L):
+    # Provides a win rate score from 0 to 1
+    selfPlayEvaluation = 0
+    if n != 0:
+        selfPlayEvaluation = w / n
+    nnEvaluation = q
+    winRate = (nnEvaluation + selfPlayEvaluation) / 2
+
+    # Exploration
+    exploration = c * math.sqrt(N)/(1+n)
+
+    UCT = winRate + exploration
+    return UCT * L
+
 
 
 x = MonteCarlo()
