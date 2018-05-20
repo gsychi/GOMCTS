@@ -1,5 +1,9 @@
 #THIS IS A NEURAL NETWORK WITH MNIST DATA
-#will wire in stuff for specific tic tac toe/ go once available
+#will wire in stuff for specific tic tac toe/go once available
+
+# will work on making this convolutional...
+# this is beneficial for computer AIs because it starts to understand certain patterns in the board.
+# may not be necessary for tic tac toe but oh well
 
 import tensorflow as tf
 from tensorflow.examples.tutorials.mnist import input_data
