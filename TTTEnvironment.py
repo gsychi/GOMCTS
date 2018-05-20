@@ -40,3 +40,52 @@ def numberToState(number):
     turn=number[-1]
     gameState = stateX, stateO, turn
     return(gameState)
+
+def makeMove(position):
+    if turn==0:
+        X_flat = Xstate.flatten
+        X_flat[position] = 1
+        Xstate = X_flat.reshape(3,3)
+
+    else:
+        Y_flat = Ystate.flatten
+        Y_flat[position] = 1
+        Ystate = Y_flat.reshape(3, 3)
+
+
+def legalMove():
+    Board_State = (Xstate+Ostate).flatten
+    return 1-Board_State
+
+def undoMove():
+
+def check_Win():
+    X_flat = Xstate.flatten
+    for i in range(3):
+        if X_flat[i*3] == 1 and X_flat[i*3 + 1] == 1 and X_flat[i*3 + 2] == 1:
+            return 1
+        elif X_flat[i] == 1 and X_flat[i + 3] == 1 and X_flat[i + 6] == 1:
+            return 1
+
+        if X_flat[0] == 1 and X_flat[4] == 1 and X_flat[8] == 1:
+            return 1
+        elif X_flat[2] == 1 and X_flat[4] == 1 and X_flat[6] == 1:
+            return 1
+
+    Y_flat = Ystate.flatten
+    for i in range(3):
+        if Y_flat[i*3] == 1 and Y_flat[i*3 + 1] == 1 and Y_flat[i*3 + 2] == 1:
+            return -1
+        elif Y_flat[i] == 1 and Y_flat[i + 3] == 1 and Y_flat[i + 6] == 1:
+            return -1
+
+        if Y_flat[0] == 1 and Y_flat[4] == 1 and Y_flat[8] == 1:
+            return -1
+        elif Y_flat[2] == 1 and Y_flat[4] == 1 and Y_flat[6] == 1:
+            return -1
+
+    if np.sum(legalMove()) != 0:
+        return 2
+
+    return 0
+
