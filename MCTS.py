@@ -3,8 +3,8 @@ import numpy as np
 class MonteCarlo():
 
     # We will use three lists:
-    # seenStates stores the gameStates that have been seen. This is a library.
-    # parentSeen stores the times that the current gameState has been seen
+    # seenStates stores the game states that have been seen. This is a library.
+    # parentSeen stores the times that the current dictionary has been seen
     # Each game state corresponds to arrays of the possible moves (<=9)
     # There are 3 points information stored for each of the children
     # - win count, number of times visited, and neural network evaluation
@@ -13,10 +13,10 @@ class MonteCarlo():
     def __init__(self):
         # This is a dictionary. Information will be updated as playouts start. ['stateToString': 0]
         # 0 corresponds to position 0 on all the other arrays, 1 corresponds to position 1...hmmm.
-        self.gameState = {
+        self.dictionary = {
             '0000000000000000000': 0  # empty board corresponds to position 0 on numpy arrays
         }
-        self.gameStateSeen = np.zeros(9)
+        self.dictionarySeen = np.zeros(9)
         self.childrenStateSeen = np.zeros((1, 9))  # This is a 2D array
         self.childrenStateWin = np.zeros((1, 9))  # This is a 2D array
         self.childrenNNEvaluation = np.zeros((1, 9))  # This is a 2D array
@@ -33,23 +33,25 @@ class MonteCarlo():
         #some tic tac toe initializing shit here
         # foo = boardToNumber for now
         position = 'blah'
-        legalMoves
+        legalMoves =
 
         #if game state is seen before,
-        if position in gameState:
-            move = chooseMove(chooseMove(position, legalMoves))
-            if (turns%2)==0:
+        if position in self.dictionary:
+            move = self.chooseMove(chooseMove(position, legalMoves))
+            if turns%2 ==0:
+                print("x moves")
                 #change tic tac toe board
-            if (turns % 2) == 1:
+            elif turns % 2 == 1:
+                print("o moves")
                 # change tic tac toe board
 
     #choose argmax per (P)UCT Algorithm
     def chooseMove(self, position, legalMoves):
-        index = gameStates[position]  # This returns a number based on the library
+        index = self.dictionary[position]  # This returns a number based on the library
 
         # here we will assume that there is a legalMove function that works as followed:
         # If the first row of a tic tac toe row is all taken, then it returns [0,0,0,1,1,1,1,1,1]
-        moveChoice = UCT_Algorithm(childrenStateWin[index], childrenStateSeen[index], 2, gameStateSeen[index], childrenNNEvaluation[index], legalMoves)
+        moveChoice = UCT_Algorithm(self.childrenStateWin[index], self.childrenStateSeen[index], 2, self.dictionarySeen[index], self.childrenNNEvaluation[index], legalMoves)
         return np.argmax(moveChoice)
 
 # w stands for # of wins, n stands for number of times node has been visited.
@@ -88,4 +90,4 @@ def PUCT_Algorithm(w, n, c, N, q, L):
 
 
 x = MonteCarlo()
-print(x.gameStates)
+print(x.dictionary)
