@@ -1,4 +1,5 @@
 import numpy as np
+import TTTEnvironment
 
 class MonteCarlo():
 
@@ -13,7 +14,7 @@ class MonteCarlo():
     def __init__(self):
         # This is a dictionary. Information will be updated as playouts start. ['stateToString': 0]
         # 0 corresponds to position 0 on all the other arrays, 1 corresponds to position 1...hmmm.
-        self.gameState = {
+        self.dictionary = {
             '0000000000000000000': 0  # empty board corresponds to position 0 on numpy arrays
         }
         self.gameStateSeen = np.zeros(9)
@@ -32,12 +33,18 @@ class MonteCarlo():
 
         #some tic tac toe initializing shit here
         # foo = boardToNumber for now
-        position = 'blah'
-        legalMoves
+        position = '0000000000000000000'
+        
+        board=TTTEnvironment()
+        
+        board.state=TTTEnvironment.stringToState(position)
+        TTTEnvironment.setValues(board)
+        
+        legalMoves=board.legalMove(self)
 
         #if game state is seen before,
-        if position in gameState:
-            move = chooseMove(chooseMove(position, legalMoves))
+        if position in self.dictionary:
+            move = self.chooseMove(self.chooseMove(position, legalMoves))
             if (turns%2)==0:
                 #change tic tac toe board
             if (turns % 2) == 1:
@@ -45,11 +52,11 @@ class MonteCarlo():
 
     #choose argmax per (P)UCT Algorithm
     def chooseMove(self, position, legalMoves):
-        index = gameStates[position]  # This returns a number based on the library
+        index = self.dictionary[position]  # This returns a number based on the library
 
         # here we will assume that there is a legalMove function that works as followed:
         # If the first row of a tic tac toe row is all taken, then it returns [0,0,0,1,1,1,1,1,1]
-        moveChoice = UCT_Algorithm(childrenStateWin[index], childrenStateSeen[index], 2, gameStateSeen[index], childrenNNEvaluation[index], legalMoves)
+        moveChoice = UCT_Algorithm(self.childrenStateWin[index], self.childrenStateSeen[index], 2, self.gameStateSeen[index], self.childrenNNEvaluation[index], legalMoves)
         return np.argmax(moveChoice)
 
 # w stands for # of wins, n stands for number of times node has been visited.
@@ -65,7 +72,7 @@ def UCT_Algorithm(w, n, c, N, q, L):
     winRate = (nnEvaluation + selfPlayEvaluation) / 2
 
     # Exploration
-    exploration = c * math.sqrt(math.log(N) / n)
+    exploration = c * np.sqrt(np.log(N) / n)
 
     UCT = winRate + exploration
     return UCT * L
@@ -80,7 +87,7 @@ def PUCT_Algorithm(w, n, c, N, q, L):
     winRate = (nnEvaluation + selfPlayEvaluation) / 2
 
     # Exploration
-    exploration = c * math.sqrt(N)/(1+n)
+    exploration = c * np.sqrt(N)/(1+n)
 
     UCT = winRate + exploration
     return UCT * L
