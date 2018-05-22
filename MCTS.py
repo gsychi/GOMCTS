@@ -94,34 +94,34 @@ class MonteCarlo():
 
         if end==1:
             for x in range(len(XstatesExplored)):
-                dictionaryValue=dict[str(XstatesExplored[x])]
+                dictionaryValue=self.dictionary[str(XstatesExplored[x])]
                 self.childrenStateSeen[dictionaryValue]+=XactionsDone[dictionaryValue]
                 self.childrenStateWin[dictionaryValue]+=XactionsDone[dictionaryValue]
 
             for x in range(len(OstatesExplored)):
-                dictionaryValue=dict[str(OstatesExplored[x])]
+                dictionaryValue=self.dictionary[str(OstatesExplored[x])]
                 self.childrenStateSeen[dictionaryValue]+=OactionsDone[dictionaryValue]
                 #no childrenStateWin because you lost
 
         if end==-1:
             for x in range(len(XstatesExplored)):
-                dictionaryValue=dict[str(XstatesExplored[x])]
+                dictionaryValue=self.dictionary[str(XstatesExplored[x])]
                 self.childrenStateSeen[dictionaryValue]+=XactionsDone[dictionaryValue]
                 # no childrenStateWin because you lost
 
             for x in range(len(OstatesExplored)):
-                dictionaryValue=dict[str(OstatesExplored[x])]
+                dictionaryValue=self.dictionary[str(OstatesExplored[x])]
                 self.childrenStateSeen[dictionaryValue]+=OactionsDone[dictionaryValue]
                 self.childrenStateWin[dictionaryValue] += OactionsDone[dictionaryValue]
 
         if end==2:
             for x in range(len(XstatesExplored)):
-                dictionaryValue=dict[str(XstatesExplored[x])]
+                dictionaryValue=self.dictionary[str(XstatesExplored[x])]
                 self.childrenStateSeen[dictionaryValue]+=XactionsDone[dictionaryValue]
                 self.childrenStateWin[dictionaryValue] += 0.5*XactionsDone[dictionaryValue]
 
             for x in range(len(OstatesExplored)):
-                dictionaryValue=dict[str(OstatesExplored[x])]
+                dictionaryValue=self.dictionary[str(OstatesExplored[x])]
                 self.childrenStateSeen[dictionaryValue]+=OactionsDone[dictionaryValue]
                 self.childrenStateWin[dictionaryValue] += 0.5*OactionsDone[dictionaryValue]
 
