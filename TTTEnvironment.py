@@ -61,6 +61,7 @@ class TTTEnvironment:
 
     def stringToState(self, string):
         length = len(string)
+        number=string[:]
         for x in range(19 - length):
             number = '0' + number
         number = str(number)
