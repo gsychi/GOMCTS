@@ -148,7 +148,7 @@ class MonteCarlo():
 # L is a number of value 0 or 1. If the move is legal, then this value is 1. If the move is not, then this value is 0.
 def UCT_Algorithm(w, n, c, N, q, L):
     # Provides a win rate score from 0 to 1
-    selfPlayEvaluation = 0
+    selfPlayEvaluation = 0.5
     if n != 0:
         selfPlayEvaluation = w / n
     nnEvaluation = q
@@ -163,7 +163,7 @@ def UCT_Algorithm(w, n, c, N, q, L):
 #UCT Algorithm used by Alpha Zero
 def PUCT_Algorithm(w, n, c, N, q, L):
     # Provides a win rate score from 0 to 1
-    selfPlayEvaluation = 0
+    selfPlayEvaluation = 0.5
     if n != 0:
         selfPlayEvaluation = w / n
     nnEvaluation = q
@@ -178,4 +178,4 @@ def PUCT_Algorithm(w, n, c, N, q, L):
 
 
 x = MonteCarlo()
-print(x.gameStates)
+print(x.dictionary)

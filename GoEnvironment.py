@@ -68,9 +68,10 @@ class GoEnvironment:
             print('\n')
 
     def customMove(self, move, colour):
-        directory =
+        print("nothing")
 
     def makeMove(self, move):
+        print("nothing")
 
     def OneBoardToState(self, board):
         output = []
