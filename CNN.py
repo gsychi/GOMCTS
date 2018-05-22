@@ -111,6 +111,7 @@ for i in range(1000):
     input_fn = tf.estimator.inputs.numpy_input_fn(
         x={'states': mnist.test.images}, y=mnist.test.labels,
         batch_size=batch_size, shuffle=False)
+    print(input_fn)
     # Use the Estimator 'evaluate' method
     e = model.evaluate(input_fn)
 

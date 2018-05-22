@@ -6,6 +6,7 @@
 # may not be necessary for tic tac toe but oh well
 
 import tensorflow as tf
+import numpy as np
 from tensorflow.examples.tutorials.mnist import input_data
 
 mnist = input_data.read_data_sets("/tmp/data/", one_hot=True)
@@ -68,6 +69,14 @@ def train_nn(c, epochs):
     with tf.Session() as sess:
         sess.run(tf.initialize_all_variables())
 
+        # newTraining is a numpy array
+        newTraining = np.ones((1, 784))
+        newTraining[0] = mnist.train.images[0]
+
+        #initial predictions
+        print("BASED ON MODEL:")
+        print(sess.run(prediction, feed_dict={x: newTraining}))
+
         #training
         for epoch in range(hm_epochs):
             epoch_loss = 0
@@ -82,5 +91,26 @@ def train_nn(c, epochs):
             accuracy = tf.reduce_mean(tf.cast(correct, 'float'))
             print('Accuracy:', accuracy.eval({x: mnist.test.images, y: mnist.test.labels}))
 
+            print("BASED ON MODEL:")
+            print(sess.run(prediction, feed_dict={x: newTraining}))
 
-train_nn(x,200)
+
+train_nn(x, 50)
+
+
+# THIS PRINTS DIRECTLY FROM A TENSOR
+
+newTraining = np.ones((1, 784))
+newTraining[0] = mnist.train.images[0]
+data_new = np.asarray(newTraining, np.float32)
+data_tf = tf.convert_to_tensor(data_new, np.float32)
+blah = nn_model(data_tf)
+
+with tf.Session() as sess:
+    sess.run(tf.initialize_all_variables())
+    #print(sess.run(blah))
+
+
+
+
+

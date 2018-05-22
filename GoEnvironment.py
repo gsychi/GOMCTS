@@ -131,14 +131,14 @@ class GoEnvironment:
             print('Captured stone ' , ((i * 9) + j))
 
     def locateChains(self):
-
+        print("tbc")
     def followChain(self, board, i, j, c):
-
+        print("tbc")
     def findChains(self, board):
-
+        print("tbc")
     def surArray(self, chains):
         output = np.ones(len(chains),1)
-        for i in range(len(chains))
+        for i in range(len(chains)):
             output[i] = self.surroundings(chains[i])
         return output
 
