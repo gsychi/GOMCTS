@@ -37,7 +37,7 @@ class TTTEnvironment:
         number = number + str(int(temp[2]))
         return number
 
-    def numberToState(number):
+    def numberToState(self, number):
         length = int(np.log10(number + 1)) + 1
         number = str(number)
         for x in range(19 - length):
@@ -59,7 +59,7 @@ class TTTEnvironment:
         gameState = stateX, stateO, turn
         return (gameState)
 
-    def stringToState(string):
+    def stringToState(self, string):
         length = len(string)
         for x in range(19 - length):
             number = '0' + number
@@ -136,16 +136,17 @@ class TTTEnvironment:
 
         return 0
 
-newenv = TTTEnvironment()
-print(newenv.legalMove())
-newenv.makeMove(0)
-print(newenv.Xstate)
-newenv.turn = 1
-newenv.makeMove(3)
-print(newenv.Xstate)
-print(newenv.Ostate)
-print(newenv.check_Win())
-newenv.turn = 0
-newenv.makeMove(1)
-newenv.makeMove(2)
-print(newenv.check_Win())
+def main():
+    newenv = TTTEnvironment()
+    print(newenv.legalMove())
+    newenv.makeMove(0)
+    print(newenv.Xstate)
+    newenv.turn = 1
+    newenv.makeMove(3)
+    print(newenv.Xstate)
+    print(newenv.Ostate)
+    print(newenv.check_Win())
+    newenv.turn = 0
+    newenv.makeMove(1)
+    newenv.makeMove(2)
+    print(newenv.check_Win())
