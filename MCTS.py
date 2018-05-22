@@ -20,7 +20,7 @@ class MonteCarlo():
         #self.gameStateSeen = np.zeros(9) Commented because it seems obsolete
         self.childrenStateSeen = np.zeros((1, 9))  # This is a 2D array
         self.childrenStateWin = np.zeros((1, 9))  # This is a 2D array
-        self.childrenNNEvaluation = np.zeros((1, 9))  # This is a 2D array
+        self.childrenNNEvaluation = np.ones((1, 9))  # This is a 2D array
 
     def addToDictionary(self, position):
         self.dictionary[position]=len(self.dictionary)
@@ -29,66 +29,70 @@ class MonteCarlo():
         # We store the information in the simulation in a temporary array, before adding everything to the database.
         turns = 0
 
-        OstatesExplored = np.zeros(1)  # Store it as an array of directories for the seen stuff
+        OstatesExplored = np.zeros((1,1))  # Store it as an array of directories for the seen stuff
         OactionsDone = np.zeros((1,9))
-        XstatesExplored = np.zeros(1)  # Store it as an array of directories for the seen stuff
+        XstatesExplored = np.zeros((1,1))  # Store it as an array of directories for the seen stuff
         XactionsDone = np.zeros((1,9))
 
-        #some tic tac toe initializing shit here
-        # foo = boardToNumber for now
+        position = originalPosition
 
-        position=originalPosition
-
-        board=TTTEnvironment()
+        board = TTTEnvironment()
 
         board.state=TTTEnvironment.stringToState(board,position)
         TTTEnvironment.setValues(board)
-
-        legalMoves=board.legalMove()
 
         #if game state is seen before,
 
         end=2 #0 if draw, 1 if X won, -1 if O won, 2 if keep going
 
         while(end==2):
-            move = self.chooseMove(self.chooseMove(position, legalMoves))
-            nextPosition=position[:,:]
 
-            if (turns + board.turn % 2) == 0:  # If it's X to move
-                nextPosition[move] = 1
-            if (turns + board.turn % 2) == 1:  # If it's O to move
-                nextPosition[move + 9] = 1
-            nextPosition=nextPosition[0,:-1]+str(1-int(nextPosition[:-1]))
+            legalMoves = board.legalMove()
 
             if position not in self.dictionary:
                 self.initializePosition(position)
 
-            if (turns+board.turn % 2) == 0: # If it's X to move
-                if turns !=0 :
-                    currentPosArray = np.array([int(position)])
+            move = self.chooseMove(position, legalMoves)
+            print(move)
+
+            nextPosition = list(position)
+
+            if ((int(turns) + int(board.turn)) % 2) == 0:  # If it's X to move
+                nextPosition[move] = '1'
+            if ((int(turns) + int(board.turn)) % 2) == 1:  # If it's O to move
+                nextPosition[move + 9] = '1'
+            nextPosition[-1] = str(1-int(nextPosition[-1]))
+
+            nextPosition = ''.join(nextPosition)
+
+
+            if ((int(turns) + int(board.turn)) % 2) == 0: # If it's X to move
+                if turns != 0:
+                    currentPosArray = np.array([[(position)]])
                     newAction=np.zeros((1,9))
                     newAction[move]=1
-                    XstatesExplored=np.concatenate((XstatesExplored,currentPosArray), axis=0)
+                    XstatesExplored=np.concatenate((XstatesExplored, currentPosArray), axis=0)
                     XactionsDone=np.concatenate((XactionsDone,newAction),axis=0)
+                    #print(str(XstatesExplored[-1]))
                 else:
-                    XstatesExplored=int(position)
+                    XstatesExplored[0] = (position)
                     XactionsDone[move]=1
                 #change tic tac toe board
-            if (turns+board.turn % 2) == 1: # If it's O to move
+            if ((int(turns) + int(board.turn)) % 2) == 1: # If it's O to move
                 if turns != 0:
-                    currentPosArray = np.array([int(position)])
+                    currentPosArray = np.array([(position)])
                     newAction = np.zeros((1, 9))
                     newAction[move] = 1
                     OstatesExplored = np.concatenate((OstatesExplored, currentPosArray), axis=0)
                     OactionsDone = np.concatenate((OactionsDone, newAction), axis=0)
                 else:
-                    OstatesExplored = int(position)
+                    OstatesExplored[0] = (position)
                     OactionsDone[move] = 1
                 # change tic tac toe board
-            turns+=1
-            position=nextPosition
+            turns += 1
+            position = nextPosition
 
-            board.state = TTTEnvironment.stringToState(board,position)
+            board.state = TTTEnvironment.stringToState(board, position)
             TTTEnvironment.setValues(board)
             end=TTTEnvironment.check_Win(board)
 
@@ -126,19 +130,18 @@ class MonteCarlo():
                 self.childrenStateWin[dictionaryValue] += 0.5*OactionsDone[dictionaryValue]
 
 
-
     #choose argmax per (P)UCT Algorithm
     def chooseMove(self, position, legalMoves):
         index = self.dictionary[position]  # This returns a number based on the library
 
         # here we will assume that there is a legalMove function that works as followed:
         # If the first row of a tic tac toe row is all taken, then it returns [0,0,0,1,1,1,1,1,1]
-        moveChoice = UCT_Algorithm(self.childrenStateWin[index], self.childrenStateSeen[index], 2, self.gameStateSeen[index], self.childrenNNEvaluation[index], legalMoves)
+        moveChoice = PUCT_Algorithm(self.childrenStateWin[index], self.childrenStateSeen[index], 2, np.sum(self.childrenStateSeen[index]), self.childrenNNEvaluation[index], legalMoves)
         return np.argmax(moveChoice)
 
     def initializePosition(self, pos): #adds pos to dictionary and concatenates new layers to MCTS arrays
         self.addToDictionary(pos)
-        self.childrenStateSeen=np.concatenate((self.childrenStateSeen,np.zeros((1,9))),axis=0)
+        self.childrenStateSeen=np.concatenate((self.childrenStateSeen,np.zeros((1, 9))), axis=0)
         self.childrenStateWin = np.concatenate((self.childrenStateWin, np.zeros((1, 9))), axis=0)
         self.childrenNNEvaluation = np.concatenate((self.childrenNNEvaluation, np.zeros((1, 9))), axis=0)
 
@@ -148,9 +151,8 @@ class MonteCarlo():
 # L is a number of value 0 or 1. If the move is legal, then this value is 1. If the move is not, then this value is 0.
 def UCT_Algorithm(w, n, c, N, q, L):
     # Provides a win rate score from 0 to 1
-    selfPlayEvaluation = 0
-    if n != 0:
-        selfPlayEvaluation = w / n
+    selfPlayEvaluation = 0.5
+    selfPlayEvaluation = np.divide(w, n, out=np.zeros_like(w), where=n!=0)
     nnEvaluation = q
     winRate = (nnEvaluation + selfPlayEvaluation) / 2
 
@@ -160,12 +162,15 @@ def UCT_Algorithm(w, n, c, N, q, L):
     UCT = winRate + exploration
     return UCT * L
 
+def randomAlgorithm():
+    return np.random.rand((1,9))
+
+
 #UCT Algorithm used by Alpha Zero
 def PUCT_Algorithm(w, n, c, N, q, L):
     # Provides a win rate score from 0 to 1
-    selfPlayEvaluation = 0
-    if n != 0:
-        selfPlayEvaluation = w / n
+    selfPlayEvaluation = 0.5
+    selfPlayEvaluation = np.divide(w, n, out=np.zeros_like(w), where=n != 0)
     nnEvaluation = q
     winRate = (nnEvaluation + selfPlayEvaluation) / 2
 
@@ -175,7 +180,6 @@ def PUCT_Algorithm(w, n, c, N, q, L):
     UCT = winRate + exploration
     return UCT * L
 
-
-
 x = MonteCarlo()
-print(x.gameStates)
+print(x.dictionary)
+x.simulation('0000000000000000000')

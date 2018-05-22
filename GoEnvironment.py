@@ -14,7 +14,7 @@ class GoEnvironment:
         self.illegalKo = 999
         self.turnOfIllegalKo = 999
 
-        self.gamelog = ';FF[4]\nGM[1]\nDT[2018-01-10]\nPB[EKALGO]\nPW[EKALGO]\nBR[30k]\nWR[30k]\nRE[]\nSZ[19]\nKM[7.5]\nRU[chinese]'
+        self.gamelog = ';FF[4]\nGM[1]\nDT[2018-01-10]\nPB[MCTSGO]\nPW[MCTSGO]\nBR[30k]\nWR[30k]\nRE[]\nSZ[19]\nKM[7.5]\nRU[chinese]'
 
     def addToGameLog(self, i, j, black):
         alphabet = "abcdefghi"
