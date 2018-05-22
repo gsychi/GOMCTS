@@ -1,5 +1,5 @@
 import numpy as np
-import TTTEnvironment
+from TTTEnvironment import TTTEnvironment
 
 class MonteCarlo():
 
@@ -41,10 +41,10 @@ class MonteCarlo():
 
         board=TTTEnvironment()
 
-        board.state=TTTEnvironment.stringToState(position)
+        board.state=TTTEnvironment.stringToState(board,position)
         TTTEnvironment.setValues(board)
 
-        legalMoves=board.legalMove(self)
+        legalMoves=board.legalMove()
 
         #if game state is seen before,
 
@@ -88,9 +88,9 @@ class MonteCarlo():
             turns+=1
             position=nextPosition
 
-            board.state = TTTEnvironment.stringToState(position)
+            board.state = TTTEnvironment.stringToState(board,position)
             TTTEnvironment.setValues(board)
-            end=TTTEnvironment.check_Win()
+            end=TTTEnvironment.check_Win(board)
 
         if end==1:
             for x in range(len(XstatesExplored)):
@@ -148,7 +148,7 @@ class MonteCarlo():
 # L is a number of value 0 or 1. If the move is legal, then this value is 1. If the move is not, then this value is 0.
 def UCT_Algorithm(w, n, c, N, q, L):
     # Provides a win rate score from 0 to 1
-    selfPlayEvaluation = 0.5
+    selfPlayEvaluation = 0
     if n != 0:
         selfPlayEvaluation = w / n
     nnEvaluation = q
@@ -163,7 +163,7 @@ def UCT_Algorithm(w, n, c, N, q, L):
 #UCT Algorithm used by Alpha Zero
 def PUCT_Algorithm(w, n, c, N, q, L):
     # Provides a win rate score from 0 to 1
-    selfPlayEvaluation = 0.5
+    selfPlayEvaluation = 0
     if n != 0:
         selfPlayEvaluation = w / n
     nnEvaluation = q
@@ -178,4 +178,4 @@ def PUCT_Algorithm(w, n, c, N, q, L):
 
 
 x = MonteCarlo()
-print(x.dictionary)
+print(x.gameStates)
