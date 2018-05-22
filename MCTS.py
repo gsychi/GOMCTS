@@ -52,7 +52,7 @@ class MonteCarlo():
             if position not in self.dictionary:
                 self.initializePosition(position)
 
-            move = self.chooseMove(position, legalMoves)
+            move = self.debugChooseMove(turns)
             print(move)
 
             nextPosition = list(position)
@@ -70,24 +70,24 @@ class MonteCarlo():
                 if turns != 0:
                     currentPosArray = np.array([[(position)]])
                     newAction=np.zeros((1,9))
-                    newAction[move]=1
+                    newAction[0, move]=1
                     XstatesExplored=np.concatenate((XstatesExplored, currentPosArray), axis=0)
                     XactionsDone=np.concatenate((XactionsDone,newAction),axis=0)
-                    #print(str(XstatesExplored[-1]))
+                    print(str(XstatesExplored[-1]))
                 else:
                     XstatesExplored[0] = (position)
-                    XactionsDone[move]=1
+                    XactionsDone[0,move]=1
                 #change tic tac toe board
             if ((int(turns) + int(board.turn)) % 2) == 1: # If it's O to move
                 if turns != 0:
                     currentPosArray = np.array([(position)])
                     newAction = np.zeros((1, 9))
-                    newAction[move] = 1
+                    newAction[0, move] = 1
                     OstatesExplored = np.concatenate((OstatesExplored, currentPosArray), axis=0)
                     OactionsDone = np.concatenate((OactionsDone, newAction), axis=0)
                 else:
                     OstatesExplored[0] = (position)
-                    OactionsDone[move] = 1
+                    OactionsDone[0,move] = 1
                 # change tic tac toe board
             turns += 1
             position = nextPosition
@@ -130,12 +130,16 @@ class MonteCarlo():
                 self.childrenStateWin[dictionaryValue] += 0.5*OactionsDone[dictionaryValue]
 
 
+    def debugChooseMove(self, x):
+        return x
+
     #choose argmax per (P)UCT Algorithm
     def chooseMove(self, position, legalMoves):
         index = self.dictionary[position]  # This returns a number based on the library
 
         # here we will assume that there is a legalMove function that works as followed:
         # If the first row of a tic tac toe row is all taken, then it returns [0,0,0,1,1,1,1,1,1]
+
         moveChoice = PUCT_Algorithm(self.childrenStateWin[index], self.childrenStateSeen[index], 2, np.sum(self.childrenStateSeen[index]), self.childrenNNEvaluation[index], legalMoves)
         return np.argmax(moveChoice)
 
@@ -162,8 +166,6 @@ def UCT_Algorithm(w, n, c, N, q, L):
     UCT = winRate + exploration
     return UCT * L
 
-def randomAlgorithm():
-    return np.random.rand((1,9))
 
 
 #UCT Algorithm used by Alpha Zero
