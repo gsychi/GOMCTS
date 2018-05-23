@@ -206,9 +206,9 @@ class MonteCarlo():
         temp = TTTEnvironment()
         temp.state = TTTEnvironment.stringToState(temp, position)
         temp.setValues()
-        noiseConstant = (5-np.sum(temp.Xstate.flatten()))/50
+        noiseConstant = 0.10/(2*(1+np.sum(temp.Xstate.flatten())))
         if noise==True:
-            noise = np.random.rand(1,9)*noiseConstant*2-noiseConstant
+            noise = np.random.rand(1, 9)*noiseConstant*2-noiseConstant
             moveChoice = moveChoice + noise
 
 

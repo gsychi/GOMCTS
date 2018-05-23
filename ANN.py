@@ -91,8 +91,8 @@ def train_nn(c, epochs):
             accuracy = tf.reduce_mean(tf.cast(correct, 'float'))
             print('Accuracy:', accuracy.eval({x: mnist.test.images, y: mnist.test.labels}))
 
-            print("BASED ON MODEL:")
-            print(sess.run(prediction, feed_dict={x: newTraining}))
+            #print("BASED ON MODEL:")
+            #print(sess.run(prediction, feed_dict={x: newTraining}))
 
 
 train_nn(x, 50)
