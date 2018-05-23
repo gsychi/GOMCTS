@@ -392,7 +392,7 @@ x = MonteCarlo(brain)
 for i in range(3000):
     print("GENERATION " + str(i+1))
     #450 games, 25 playouts for each move
-    inputs, outputs = x.createDatabaseForNN(90, 25)
+    inputs, outputs = x.createDatabaseForNN(220, 25)
     brain = NeuralNetwork(inputs, outputs, 80)
     print(len(inputs))
     print("Training Network with previous data...")
