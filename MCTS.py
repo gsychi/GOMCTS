@@ -370,6 +370,7 @@ brain = NeuralNetwork(np.zeros((1, 19)), np.zeros((1, 9)), 50)
 x = MonteCarlo(brain)
 
 for i in range(300):
+    print("GENERATION " + str(i+1))
     #40 games, 50 playouts per move
     inputs, outputs = x.createDatabaseForNN(100, 2)
     brain = NeuralNetwork(inputs, outputs, 80)
@@ -378,14 +379,12 @@ for i in range(300):
     print("Self-learning is complete.")
     correct = (np.argmax(brain.predict(inputs), axis=1) == np.argmax(outputs, axis=1)).sum()
     print("Accuracy: ", correct/len(inputs))
-
     #Update the network onto MCTS
     x.neuralNetwork = brain
     x.updateEvals()
+    print(x.dictionary)
     print("GAMES BY NEW NETWORK")
     x.trainingGame(5000)
-
-
 
 #This checks accuracy of neural network training hmm.
 #print(np.argmax(brain.predict(inputs), axis=1))
