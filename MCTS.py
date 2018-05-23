@@ -94,7 +94,7 @@ class MonteCarlo():
             """
 
             #move = self.debugChooseMove(turns)
-            move = self.chooseMove(position, board.legalMove())
+            move = self.chooseMove(position, board.legalMove(), 2**0.5)
 
             if ((int(board.turn)) % 2) == 0:  # If it's X to move
                 nextPosition[move] = '1'
@@ -190,13 +190,13 @@ class MonteCarlo():
         return self.dictionary
 
     #choose argmax per (P)UCT Algorithm
-    def chooseMove(self, position, legalMoves):
+    def chooseMove(self, position, legalMoves, c):
         index = self.dictionary[position]  # This returns a number based on the library
 
         # here we will assume that there is a legalMove function that works as followed:
         # If the first row of a tic tac toe row is all taken, then it returns [0,0,0,1,1,1,1,1,1]
 
-        moveChoice = PUCT_Algorithm(self.childrenStateWin[index], self.childrenStateSeen[index], 2**0.5*np.ones((1,9)), np.sum(self.childrenStateSeen[index]), self.childrenNNEvaluation[index], legalMoves)
+        moveChoice = PUCT_Algorithm(self.childrenStateWin[index], self.childrenStateSeen[index], c*np.ones((1,9)), np.sum(self.childrenStateSeen[index]), self.childrenNNEvaluation[index], legalMoves)
         return np.argmax(moveChoice)
 
     def initializePosition(self, pos): #adds pos to dictionary and concatenates new layers to MCTS arrays
@@ -214,24 +214,24 @@ class MonteCarlo():
         return number
 
     #returns the index of a move for competitive play
-    def competitiveMove(self, position):
+    def competitiveMove(self, sims, position):
 
         board = TTTEnvironment()
         board.state = TTTEnvironment.stringToState(board, position)
         TTTEnvironment.setValues(board)
 
-        self.runSimulations(3200, position)
-        index = self.chooseMove(position, board.legalMove())
+        self.runSimulations(sims, position)
+        index = self.chooseMove(position, board.legalMove(), 2**0.5)
         return int(index)
 
     #returns the index of a move for training
-    def trainingMove(self, position):
+    def trainingMove(self, sims, position):
 
         board = TTTEnvironment()
         board.state = TTTEnvironment.stringToState(board, position)
         TTTEnvironment.setValues(board)
 
-        self.runSimulations(3200, position)
+        self.runSimulations(sims, position)
         index = np.argmax(self.childrenStateSeen[self.dictionary[position]])
         return int(index)
 
@@ -242,7 +242,11 @@ x = MonteCarlo()
 seriousGame = TTTEnvironment()
 while seriousGame.check_Win() == 2:
     #MAKES MOVE
-    seriousGame.makeMove(x.competitiveMove(seriousGame.stateToString()))
+    seriousGame.makeMove(x.competitiveMove(1000, seriousGame.stateToString()))
+    if int(seriousGame.turn) == 0:
+        print("x moved") #then do stuff, take from above simulation
+    else:
+        print("o moved") #then do stuff, take from above simulation
     seriousGame.turn = str((int(seriousGame.turn) + 1) % 2)
     seriousGame.updateState()
     print(seriousGame.Xstate)
@@ -255,8 +259,8 @@ print(seriousGame.Ostate)
 
 
 print("\n\n---training data---")
+#this would be input and output, for example
 print(x.dictionary)
-print(x.childrenStateSeen)
-print(x.childrenStateWin)
+print(np.divide(x.childrenStateWin, x.childrenStateSeen, out=np.zeros_like(x.childrenStateWin), where=x.childrenStateSeen!= 0))
 
 #print(x.childrenNNEvaluation)
