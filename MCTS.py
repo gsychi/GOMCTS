@@ -1,6 +1,6 @@
 import numpy as np
 from TTTEnvironment import TTTEnvironment
-
+from ourNN import NeuralNetwork
 
 # w stands for # of wins, n stands for number of times node has been visited.
 # N stands for number of times parent node is visited, and c is just an exploration constant that can be tuned.
@@ -46,9 +46,10 @@ class MonteCarlo():
     # - win count, number of times visited, and neural network evaluation
     # This is helpful because we get to use numpy stuffs.
 
-    def __init__(self):
+    def __init__(self, a):
         # This is a dictionary. Information will be updated as playouts start. ['stateToString': 0]
         # 0 corresponds to position 0 on all the other arrays, 1 corresponds to position 1...hmmm.
+        beginState = np.array([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0])
         self.dictionary = {
             '0000000000000000000': 0  # empty board corresponds to position 0 on numpy arrays
         }
@@ -56,7 +57,9 @@ class MonteCarlo():
 
         self.childrenStateSeen = np.zeros((1, 9))  # This is a 2D array
         self.childrenStateWin = np.zeros((1, 9))  # This is a 2D array
-        self.childrenNNEvaluation = np.random.rand(1, 9)  # This is a 2D array
+        self.childrenNNEvaluation = np.zeros((1, 9))  # This is a 2D array
+        self.childrenNNEvaluation[0] = a.predict(beginState)
+        self.neuralNetwork = a
 
     def addToDictionary(self, position):
         self.dictionary[position]=len(self.dictionary)
@@ -203,7 +206,11 @@ class MonteCarlo():
         self.addToDictionary(pos)
         self.childrenStateSeen = np.concatenate((self.childrenStateSeen,np.zeros((1, 9))), axis=0)
         self.childrenStateWin = np.concatenate((self.childrenStateWin, np.zeros((1, 9))), axis=0)
-        self.childrenNNEvaluation = np.concatenate((self.childrenNNEvaluation, np.random.rand(1, 9)), axis=0)
+        board = TTTEnvironment()
+        board.state = TTTEnvironment.stringToState(board, pos)
+        TTTEnvironment.setValues(board)
+        winPercentages = self.neuralNetwork.predict(board.stateToArray())
+        self.childrenNNEvaluation = np.concatenate((self.childrenNNEvaluation, winPercentages), axis=0)
 
     def intToPos(self, integ):
         number = int(integ)
@@ -285,9 +292,9 @@ class MonteCarlo():
                     OactionsDone = np.concatenate((OactionsDone, newAction), axis=0)
 
             seriousGame.updateState()
-            # print(seriousGame.Xstate)
-            # print(seriousGame.Ostate)
-            # print("-------")
+            print(seriousGame.Xstate)
+            print(seriousGame.Ostate)
+            print("-------")
 
         # print(seriousGame.check_Win())
         # print(seriousGame.Xstate)
@@ -304,12 +311,21 @@ class MonteCarlo():
             OactionsWin = OactionsDone * 1
 
         # now, create the training data.
-        XwinRate = np.divide(XactionsWin, XactionsDone, out=np.zeros_like(XactionsWin), where=XactionsDone != 0)
-        OwinRate = np.divide(OactionsWin, OactionsDone, out=np.zeros_like(OactionsWin), where=OactionsDone != 0)
-
         inputs = np.concatenate((XstatesExplored, OstatesExplored), axis=0)
         outputSeen = np.concatenate((XactionsDone, OactionsDone), axis=0)
         outputWin = np.concatenate((XactionsWin, OactionsWin), axis=0)
+
+        # Clear the MCTS search...
+        self.dictionary = {
+            '0000000000000000000': 0  # empty board corresponds to position 0 on numpy arrays
+        }
+        # self.gameStateSeen = np.zeros(9) Commented because it seems obsolete
+        beginState = np.array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+        self.childrenStateSeen = np.zeros((1, 9))  # This is a 2D array
+        self.childrenStateWin = np.zeros((1, 9))  # This is a 2D array
+        self.childrenNNEvaluation = np.zeros((1, 9))  # This is a 2D array
+        self.childrenNNEvaluation[0] = self.neuralNetwork.predict(beginState)
+
 
         return inputs, outputSeen, outputWin
 
@@ -348,10 +364,30 @@ class MonteCarlo():
         outputs = np.divide(outputWin, outputSeen, out=np.zeros_like(outputWin), where=outputSeen != 0)
         return inputs, outputs
 
-x = MonteCarlo()
-#100 games, 120 playouts for each move.
-inputs, outputs = x.createDatabaseForNN(100, 120)
-print(inputs.shape)
-print(outputs.shape)
+
+brain = NeuralNetwork(np.zeros((1, 19)), np.zeros((1, 9)), 50)
+x = MonteCarlo(brain)
+
+for i in range(300):
+    #40 games, 50 playouts per move
+    inputs, outputs = x.createDatabaseForNN(40, 50)
+
+    brain = NeuralNetwork(inputs, outputs, 50)
+    print("Training Network with previous data...")
+    brain.trainNetwork(30000, 0.001)
+    print("Self-learning is complete.")
+    correct = (np.argmax(brain.predict(inputs), axis=1) == np.argmax(outputs, axis=1)).sum()
+    print("Accuracy: ", correct)
+
+    #Update the network onto MCTS
+    x.neuralNetwork = brain
+    print("GAMES BY NEW NETWORK")
+    x.trainingGame(5000)
 
 
+
+#This checks accuracy of neural network training hmm.
+#print(np.argmax(brain.predict(inputs), axis=1))
+#print(np.argmax(outputs, axis=1))
+#correct = (np.argmax(brain.predict(inputs), axis=1) == np.argmax(outputs, axis=1)).sum()
+#print(correct/len(inputs))
