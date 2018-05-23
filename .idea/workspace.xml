@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="02f5fc88-ce52-42a5-8bdb-e8054efa7383" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/MCTS.py" afterPath="$PROJECT_DIR$/MCTS.py" />
-      <change beforePath="$PROJECT_DIR$/ourNN.py" afterPath="$PROJECT_DIR$/ourNN.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -27,8 +26,8 @@
       <file leaf-file-name="MCTS.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/MCTS.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="83">
-              <caret line="372" column="48" lean-forward="false" selection-start-line="372" selection-start-column="48" selection-end-line="372" selection-end-column="48" />
+            <state relative-caret-position="140">
+              <caret line="382" column="27" lean-forward="false" selection-start-line="382" selection-start-column="27" selection-end-line="382" selection-end-column="27" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -83,6 +82,7 @@
       <find>initialize</find>
       <find>bias_2</find>
       <find>trainingMove</find>
+      <find>updateEvals</find>
     </findStrings>
     <replaceStrings>
       <replace>self.state</replace>
@@ -691,8 +691,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/MCTS.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="83">
-          <caret line="372" column="48" lean-forward="false" selection-start-line="372" selection-start-column="48" selection-end-line="372" selection-end-column="48" />
+        <state relative-caret-position="140">
+          <caret line="382" column="27" lean-forward="false" selection-start-line="382" selection-start-column="27" selection-end-line="382" selection-end-column="27" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>

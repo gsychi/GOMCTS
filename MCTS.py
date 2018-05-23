@@ -212,6 +212,19 @@ class MonteCarlo():
         winPercentages = self.neuralNetwork.predict(board.stateToArray())
         self.childrenNNEvaluation = np.concatenate((self.childrenNNEvaluation, winPercentages), axis=0)
 
+    def updateEvals(self):
+        beginState = np.array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+        self.dictionary = {
+            '0000000000000000000': 0  # empty board corresponds to position 0 on numpy arrays
+        }
+        # self.gameStateSeen = np.zeros(9) Commented because it seems obsolete
+
+        self.childrenStateSeen = np.zeros((1, 9))  # This is a 2D array
+        self.childrenStateWin = np.zeros((1, 9))  # This is a 2D array
+        self.childrenNNEvaluation = np.zeros((1, 9))  # This is a 2D array
+        self.childrenNNEvaluation[0] = self.neuralNetwork.predict(beginState)
+
+
     def intToPos(self, integ):
         number = int(integ)
         number = str(number)
@@ -315,18 +328,6 @@ class MonteCarlo():
         outputSeen = np.concatenate((XactionsDone, OactionsDone), axis=0)
         outputWin = np.concatenate((XactionsWin, OactionsWin), axis=0)
 
-        # Clear the MCTS search...
-        self.dictionary = {
-            '0000000000000000000': 0  # empty board corresponds to position 0 on numpy arrays
-        }
-        # self.gameStateSeen = np.zeros(9) Commented because it seems obsolete
-        beginState = np.array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-        self.childrenStateSeen = np.zeros((1, 9))  # This is a 2D array
-        self.childrenStateWin = np.zeros((1, 9))  # This is a 2D array
-        self.childrenNNEvaluation = np.zeros((1, 9))  # This is a 2D array
-        self.childrenNNEvaluation[0] = self.neuralNetwork.predict(beginState)
-
-
         return inputs, outputSeen, outputWin
 
     def createDatabaseForNN(self, games, playouts):
@@ -370,17 +371,17 @@ x = MonteCarlo(brain)
 
 for i in range(300):
     #40 games, 50 playouts per move
-    inputs, outputs = x.createDatabaseForNN(40, 50)
-
-    brain = NeuralNetwork(inputs, outputs, 50)
+    inputs, outputs = x.createDatabaseForNN(100, 2)
+    brain = NeuralNetwork(inputs, outputs, 80)
     print("Training Network with previous data...")
     brain.trainNetwork(30000, 0.001)
     print("Self-learning is complete.")
     correct = (np.argmax(brain.predict(inputs), axis=1) == np.argmax(outputs, axis=1)).sum()
-    print("Accuracy: ", correct)
+    print("Accuracy: ", correct/len(inputs))
 
     #Update the network onto MCTS
     x.neuralNetwork = brain
+    x.updateEvals()
     print("GAMES BY NEW NETWORK")
     x.trainingGame(5000)
 
