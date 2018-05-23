@@ -235,7 +235,7 @@ class MonteCarlo():
         index = np.argmax(self.childrenStateSeen[self.dictionary[position]])
         return int(index)
 
-    def trainingGame(self):
+    def trainingGame(self, playouts):
 
         firstMove = True
 
@@ -249,7 +249,7 @@ class MonteCarlo():
         seriousGame = TTTEnvironment()
         while seriousGame.check_Win() == 2:
             # MAKES MOVE
-            index = self.competitiveMove(10, seriousGame.stateToString())
+            index = self.competitiveMove(playouts, seriousGame.stateToString())
             # push state first
             if int(seriousGame.turn) == 0:  # x moved
                 if firstMove is True:
@@ -313,12 +313,12 @@ class MonteCarlo():
 
         return inputs, outputSeen, outputWin
 
-    def createDatabaseForNN(self, games):
+    def createDatabaseForNN(self, games, playouts):
         inputs = np.zeros((1, 19))
         outputSeen = np.zeros((1, 19))
         outputWin = np.zeros((1, 19))
         for i in range(games):
-            newInputs, newOutputSeen, newOutputWin = self.trainingGame()
+            newInputs, newOutputSeen, newOutputWin = self.trainingGame(playouts)
             if i == 0:
                 inputs = newInputs
                 outputSeen = newOutputSeen
@@ -349,7 +349,8 @@ class MonteCarlo():
         return inputs, outputs
 
 x = MonteCarlo()
-inputs, outputs = x.createDatabaseForNN(120)
+#100 games, 120 playouts for each move.
+inputs, outputs = x.createDatabaseForNN(100, 120)
 print(inputs.shape)
 print(outputs.shape)
 

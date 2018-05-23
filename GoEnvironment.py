@@ -7,6 +7,10 @@ class GoEnvironment:
         self.plies_before_board = np.zeros((3,9,9,2))
         self.turns = 0
         self.alphabet = 'ABCDEFGHJ'
+        self.wStones = []
+        self.wSurStones = []
+        self.bStones = []
+        self.bSurStones = []
         self.wChains = []
         self.wSurChains = []
         self.bChains = []
@@ -14,7 +18,7 @@ class GoEnvironment:
         self.illegalKo = 999
         self.turnOfIllegalKo = 999
 
-        self.gamelog = ';FF[4]\nGM[1]\nDT[2018-01-10]\nPB[MCTSGO]\nPW[MCTSGO]\nBR[30k]\nWR[30k]\nRE[]\nSZ[19]\nKM[7.5]\nRU[chinese]'
+        self.gamelog = ';FF[4]\nGM[1]\nDT[2018-01-10]\nPB[EKALGO]\nPW[EKALGO]\nBR[30k]\nWR[30k]\nRE[]\nSZ[19]\nKM[7.5]\nRU[chinese]'
 
     def addToGameLog(self, i, j, black):
         alphabet = "abcdefghi"
@@ -68,10 +72,16 @@ class GoEnvironment:
             print('\n')
 
     def customMove(self, move, colour):
-        print("nothing")
+        directory = np.zeros(2)
+        directory[0] = self.alphabet.index(move[:1])
+        directory[1] = 9-int(move[1:])
+        if colour == 'B':
+            turn = 0
+        elif colour == 'W':
+            turn = 1
+        self.board[directory[1]][directory[0]][turn] = 1
 
     def makeMove(self, move):
-        print("nothing")
 
     def OneBoardToState(self, board):
         output = []
@@ -90,6 +100,19 @@ class GoEnvironment:
             state = np.concatenate(state, self.OneBoardToState(self.plies_before_board[i]))
 
         return state
+
+    def updateBoard(self):
+        self.turnOfIllegalKo = 999
+        self.illegalKo = 999
+        self.wStones.clear()
+        self.wSurStones.clear()
+        self.bStones.clear()
+        self.bSurStones.clear()
+        self.locateChains()
+        if self.turns%2==0:
+            self.captureDeadStonesB()
+        else:
+            self.captureDeadStonesW()
 
     def surroundReq(self,i,j):
         ba = []
@@ -131,21 +154,66 @@ class GoEnvironment:
             print('Captured stone ' , ((i * 9) + j))
 
     def locateChains(self):
-        print("tbc")
+        for i in range(9):
+            for j in range(9):
+                array = np.ones(9*i+j)
+                if self.board[i][j][1]==1:
+                    self.wStones.append(array)
+                    self.wSurStones.append(self.surroundReq(i,j))
+                if self.board[i][j][0]==1:
+                    self.bStones.append(array)
+                    self.bSurStones.append(self.surroundReq(i,j))
+
+        white_stone_map = np.ones(9,9)
+        black_stone_map = np.ones(9,9)
+        for i in range(9):
+            for j in range(9):
+                white_stone_map[i][j]= int(self.board[i][j][0])
+                black_stone_map[i][j] = int(self.board[i][j][1])
+
+        self.wChains = self.findChains(white_stone_map)
+        self.bChains = self.findChains(black_stone_map)
+        self.wSurChains = self.surArray(self.wChains)
+        self.bSurChains = self.surArray(self.bChains)
+
+
     def followChain(self, board, i, j, c):
-        print("tbc")
+        chain = list(c)  # This just forces it to pass by value. ignore when porting to javab
+        if i >= len(board) or i < 0 or j >= len(board[0]) or j < 0:
+            return chain
+        if board[i][j] == 0 or i * 19 + j in chain:
+            return chain
+        chain.append(i * 19 + j)
+        chain1 = self.followChain(board, i + 1, j, chain)
+        chain2 = self.followChain(board, i, j + 1, chain1)
+        chain3 = self.followChain(board, i - 1, j, chain2)
+        chain4 = self.followChain(board, i, j - 1, chain3)
+        return chain4
+
     def findChains(self, board):
-        print("tbc")
+        chains = []
+        for i in range(19):
+            for j in range(19):
+                elem = board[i][j]
+                if elem == 1:
+                    if (j != 0 and board[i][j - 1] == 1) or (i != 0 and board[i - 1][j] == 1):
+                        continue
+                    chain = self.followChain(board, i, j)
+                    if len(chain) > 1:
+                        chains.append(chain)
+        return chains
+
     def surArray(self, chains):
         output = np.ones(len(chains),1)
         for i in range(len(chains)):
             output[i] = self.surroundings(chains[i])
         return output
 
-    # def surroundings(self, chain):
-    #     surroundings = self.surroundReq(chain[0]/9,chain[0]%9)
-    #     for i in range(len(chain)-1):
-    #         surroundings =
+    def surroundings(self, chain):
+        surroundings = self.surroundReq(chain[0] / 9, chain[0] % 9)
+        for i in range(len(chain)-1):
+            surroundings = self.inaccStones(chain, np.unique(np.concatenate(surroundings,self.surroundReq(chain[i]/9,chain[i]%9))))
+        return surroundings
 
     def ifSurroundedByW(self, require):
         covered = 0
@@ -172,9 +240,8 @@ class GoEnvironment:
                 self.removeStones(self.wChains[i])
                 print('Captured chain ' , self.wChains[i])
 
-        # for (int i = 0;i < wStones.size();i++) {
-        # searchSurroundings(wStones.get(i)[0] / 19, wStones.get(i)[0] % 19, 0);
-        # }
+        for i in range(len(self.wStones)):
+            self.searchSurroundings(self.wStones[i][0]/9,self.wStones[i][0]%9, 0)
 
     def captureDeadStonesB(self):
         for i in range(len(self.bChains)):
@@ -182,10 +249,17 @@ class GoEnvironment:
                 self.removeStones(self.bChains[i])
                 print('Captured chain ' , self.bChains[i])
 
-        # for (int i = 0;i < bStones.size();i++) {
-        # searchSurroundings(bStones.get(i)[0] / 19, bStones.get(i)[0] % 19, 1);
-        #
-        # }
+        for i in range(len(self.bStones)):
+            self.searchSurroundings(self.bStones[i][0]/9,self.bStones[i][0]%9, 1)
+
+    def inaccStones(self, stones, wrongSurround):
+        ky = []
+        for i in range(len(wrongSurround)):
+            if np.in1d(stones, wrongSurround[i]) == False:
+                ky.append(wrongSurround[i])
+        return ky
+
+
 
     def printAllChains(self):
         print('\n----\nFOR BLACK:\n---- ')
@@ -196,6 +270,5 @@ class GoEnvironment:
         for i in range(len(self.wChains)):
             print(self.wChains[i])
             print('Surrounding Stones: ' , self.wSurChains[i])
-
 
 
