@@ -16,6 +16,13 @@ class TTTEnvironment:
     def updateState(self):
         self.state = self.Xstate, self.Ostate, self.turn
 
+    def stateToArray(self):
+        X_flat = self.Xstate.flatten()
+        O_flat = self.Ostate.flatten()
+        turn = int(self.turn)
+        array = np.append(np.concatenate((X_flat, O_flat), axis=0), turn)
+        return array
+
     def stateToNumber(self):
         temp = self.state[0], self.state[1], self.state[2]
         number = ""  # 19 places- 9 for X, 9 for O, 1 for turn

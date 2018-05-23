@@ -235,32 +235,122 @@ class MonteCarlo():
         index = np.argmax(self.childrenStateSeen[self.dictionary[position]])
         return int(index)
 
+    def trainingGame(self):
+
+        firstMove = True
+
+        XstatesExplored = np.zeros((1, 19))  # Store it as an array of directories for the seen stuff
+        XactionsDone = np.zeros((1, 9))
+        XactionsWin = np.zeros((1, 9))
+        OstatesExplored = np.zeros((1, 19))  # Store it as an array of directories for the seen stuff
+        OactionsDone = np.zeros((1, 9))
+        OactionsWin = np.zeros((1, 9))
+
+        seriousGame = TTTEnvironment()
+        while seriousGame.check_Win() == 2:
+            # MAKES MOVE
+            index = self.competitiveMove(10, seriousGame.stateToString())
+            # push state first
+            if int(seriousGame.turn) == 0:  # x moved
+                if firstMove is True:
+                    XstatesExplored = [seriousGame.stateToArray()]
+                else:
+                    newState = [seriousGame.stateToArray()]
+                    XstatesExplored = np.concatenate((XstatesExplored, newState), axis=0)
+            else:
+                if firstMove is True:  # o moved
+                    OstatesExplored = [seriousGame.stateToArray()]
+                else:
+                    newState = [seriousGame.stateToArray()]
+                    OstatesExplored = np.concatenate((OstatesExplored, newState), axis=0)
+
+            seriousGame.makeMove(index)  # make the move
+            seriousGame.turn = str((int(seriousGame.turn) + 1) % 2)  # switch the turns.
+
+            if int(seriousGame.turn) == 1:  # x moved
+                newAction = np.zeros((1, 9))
+                newAction[0, index] = 1
+                if firstMove is True:
+                    XactionsDone = newAction
+                else:
+                    XactionsDone = np.concatenate((XactionsDone, newAction), axis=0)
+
+            else:  # o moved
+                newAction = np.zeros((1, 9))
+                newAction[0, index] = 1
+                if firstMove is True:
+                    OactionsDone = newAction
+                    firstMove = False
+                else:
+                    OactionsDone = np.concatenate((OactionsDone, newAction), axis=0)
+
+            seriousGame.updateState()
+            # print(seriousGame.Xstate)
+            # print(seriousGame.Ostate)
+            # print("-------")
+
+        # print(seriousGame.check_Win())
+        # print(seriousGame.Xstate)
+        # print(seriousGame.Ostate)
+
+        if seriousGame.check_Win() == 0:
+            XactionsWin = XactionsDone * 0.5
+            OactionsWin = OactionsDone * 0.5
+        if seriousGame.check_Win() == 1:
+            XactionsWin = XactionsDone * 1
+            OactionsWin = OactionsDone * 0
+        if seriousGame.check_Win() == -1:
+            XactionsWin = XactionsDone * 0
+            OactionsWin = OactionsDone * 1
+
+        # now, create the training data.
+        XwinRate = np.divide(XactionsWin, XactionsDone, out=np.zeros_like(XactionsWin), where=XactionsDone != 0)
+        OwinRate = np.divide(OactionsWin, OactionsDone, out=np.zeros_like(OactionsWin), where=OactionsDone != 0)
+
+        inputs = np.concatenate((XstatesExplored, OstatesExplored), axis=0)
+        outputSeen = np.concatenate((XactionsDone, OactionsDone), axis=0)
+        outputWin = np.concatenate((XactionsWin, OactionsWin), axis=0)
+
+        return inputs, outputSeen, outputWin
+
+    def createDatabaseForNN(self, games):
+        inputs = np.zeros((1, 19))
+        outputSeen = np.zeros((1, 19))
+        outputWin = np.zeros((1, 19))
+        for i in range(games):
+            newInputs, newOutputSeen, newOutputWin = self.trainingGame()
+            if i == 0:
+                inputs = newInputs
+                outputSeen = newOutputSeen
+                outputWin = newOutputWin
+            else:
+                #otherwise, check if input is already in dataset.
+                removeDirectories = []
+                for k in range(len(inputs)):
+                    for j in range(len(newInputs)):
+                        if np.sum(abs(inputs[k]-newInputs[j])) == 0:
+                            #If information is already in dataset, edit existing data
+                            outputWin[k] = outputWin[k] + newOutputWin[j]
+                            outputSeen[k] = outputSeen[k] + newOutputSeen[j]
+                            removeDirectories.append(j)
+                removeDirectories.sort()
+                while len(removeDirectories) > 0:
+                    index = removeDirectories.pop()
+                    newInputs = np.delete(newInputs, index, axis=0)
+                    newOutputWin = np.delete(newOutputWin, index, axis=0)
+                    newOutputSeen = np.delete(newOutputSeen, index, axis=0)
+                inputs = np.concatenate((inputs, newInputs), axis=0)
+                outputWin = np.concatenate((outputWin, newOutputWin), axis=0)
+                outputSeen = np.concatenate((outputSeen, newOutputSeen), axis=0)
+
+            print("Game " + str(i+1) + " processed.")
+
+        outputs = np.divide(outputWin, outputSeen, out=np.zeros_like(outputWin), where=outputSeen != 0)
+        return inputs, outputs
 
 x = MonteCarlo()
-
-#INITIALIZE BOARD
-seriousGame = TTTEnvironment()
-while seriousGame.check_Win() == 2:
-    #MAKES MOVE
-    seriousGame.makeMove(x.competitiveMove(1000, seriousGame.stateToString()))
-    if int(seriousGame.turn) == 0:
-        print("x moved") #then do stuff, take from above simulation
-    else:
-        print("o moved") #then do stuff, take from above simulation
-    seriousGame.turn = str((int(seriousGame.turn) + 1) % 2)
-    seriousGame.updateState()
-    print(seriousGame.Xstate)
-    print(seriousGame.Ostate)
-    print("-------")
-
-print(seriousGame.check_Win())
-print(seriousGame.Xstate)
-print(seriousGame.Ostate)
+inputs, outputs = x.createDatabaseForNN(120)
+print(inputs.shape)
+print(outputs.shape)
 
 
-print("\n\n---training data---")
-#this would be input and output, for example
-print(x.dictionary)
-print(np.divide(x.childrenStateWin, x.childrenStateSeen, out=np.zeros_like(x.childrenStateWin), where=x.childrenStateSeen!= 0))
-
-#print(x.childrenNNEvaluation)
