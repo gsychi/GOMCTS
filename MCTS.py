@@ -206,7 +206,7 @@ class MonteCarlo():
         temp = TTTEnvironment()
         temp.state = TTTEnvironment.stringToState(temp, position)
         temp.setValues()
-        noiseConstant = 0.10/(2*(1+np.sum(temp.Xstate.flatten())))
+        noiseConstant = 0.08/(2*(1+np.sum(temp.Xstate.flatten())))
         if noise==True:
             noise = np.random.rand(1, 9)*noiseConstant*2-noiseConstant
             moveChoice = moveChoice + noise
@@ -265,7 +265,6 @@ class MonteCarlo():
 
         self.runSimulations(sims, position)
         #index = np.argmax(self.childrenStateSeen[self.dictionary[position]])
-        noise = np.random.rand(1,9)
         index = self.chooseMove(position, board.legalMove(), 2 ** 0.5, True)
         return int(index)
 
@@ -385,13 +384,15 @@ class MonteCarlo():
         return inputs, outputs
 
 
+#TESTING THE SELF-LEARNING PROCESS
+
 brain = NeuralNetwork(np.zeros((1, 19)), np.zeros((1, 9)), 50)
 x = MonteCarlo(brain)
 
 for i in range(3000):
     print("GENERATION " + str(i+1))
     #450 games, 25 playouts for each move
-    inputs, outputs = x.createDatabaseForNN(450, 25)
+    inputs, outputs = x.createDatabaseForNN(90, 25)
     brain = NeuralNetwork(inputs, outputs, 80)
     print(len(inputs))
     print("Training Network with previous data...")
@@ -407,9 +408,3 @@ for i in range(3000):
     x.runSimulations(5000, '0000000000000000000')
     print("GAMES BY NEW NETWORK")
     x.trainingGame(12000, True)
-
-#This checks accuracy of neural network training hmm.
-#print(np.argmax(brain.predict(inputs), axis=1))
-#print(np.argmax(outputs, axis=1))
-#correct = (np.argmax(brain.predict(inputs), axis=1) == np.argmax(outputs, axis=1)).sum()
-#print(correct/len(inputs))
