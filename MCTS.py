@@ -18,6 +18,7 @@ class MonteCarlo():
             '0000000000000000000': 0  # empty board corresponds to position 0 on numpy arrays
         }
         #self.gameStateSeen = np.zeros(9) Commented because it seems obsolete
+
         self.childrenStateSeen = np.zeros((1, 9))  # This is a 2D array
         self.childrenStateWin = np.zeros((1, 9))  # This is a 2D array
         self.childrenNNEvaluation = np.ones((1, 9))  # This is a 2D array
