@@ -63,7 +63,7 @@ class MonteCarlo():
             nextPosition = ''.join(nextPosition)
 
 
-            if ((int(turns) + int(board.turn)) % 2) == 0: # If it's X to move
+            if ((int(board.turn)) % 2) == 0: # If it's X to move
                 if turns != 0:
                     currentPosArray = np.array([[(position)]])
                     newAction=np.zeros((1,9))
@@ -74,15 +74,16 @@ class MonteCarlo():
                     XstatesExplored[0,0] = position
                     XactionsDone[0,move]=1
                 #change tic tac toe board
-            if ((int(turns) + int(board.turn)) % 2) == 1: # If it's O to move
+
+            if ((int(board.turn)) % 2) == 1: # If it's O to move
                 if turns != 0:
-                    currentPosArray = np.array([(position)])
+                    currentPosArray = np.array([[(position)]])
                     newAction = np.zeros((1, 9))
                     newAction[0, move] = 1
                     OstatesExplored = np.concatenate((OstatesExplored, currentPosArray), axis=0)
                     OactionsDone = np.concatenate((OactionsDone, newAction), axis=0)
                 else:
-                    OstatesExplored[0] = position
+                    OstatesExplored[0,0] = position
                     OactionsDone[0,move] = 1
                 # change tic tac toe board
             turns += 1
@@ -95,35 +96,41 @@ class MonteCarlo():
         if end==1:
             for x in range(len(XstatesExplored)):
                 dictionaryValue=self.dictionary[XstatesExplored[x,0]]
-                self.childrenStateSeen[dictionaryValue]+=XactionsDone[dictionaryValue]
-                self.childrenStateWin[dictionaryValue]+=XactionsDone[dictionaryValue]
+                self.childrenStateSeen[dictionaryValue]+=XactionsDone[x]
+                self.childrenStateWin[dictionaryValue]+=XactionsDone[x]
 
             for x in range(len(OstatesExplored)):
                 dictionaryValue=self.dictionary[OstatesExplored[x,0]]
-                self.childrenStateSeen[dictionaryValue]+=OactionsDone[dictionaryValue]
+                self.childrenStateSeen[dictionaryValue]+=OactionsDone[x]
                 #no childrenStateWin because you lost
+
+            print('X wins')
 
         if end==-1:
             for x in range(len(XstatesExplored)):
                 dictionaryValue=self.dictionary[XstatesExplored[x,0]]
-                self.childrenStateSeen[dictionaryValue]+=XactionsDone[dictionaryValue]
+                self.childrenStateSeen[dictionaryValue]+=XactionsDone[x]
                 # no childrenStateWin because you lost
+
+            print('O wins')
 
             for x in range(len(OstatesExplored)):
                 dictionaryValue=self.dictionary[OstatesExplored[x,0]]
-                self.childrenStateSeen[dictionaryValue]+=OactionsDone[dictionaryValue]
-                self.childrenStateWin[dictionaryValue] += OactionsDone[dictionaryValue]
+                self.childrenStateSeen[dictionaryValue]+=OactionsDone[x]
+                self.childrenStateWin[dictionaryValue] += OactionsDone[x]
 
         if end==2:
             for x in range(len(XstatesExplored)):
                 dictionaryValue=self.dictionary[XstatesExplored[x,0]]
-                self.childrenStateSeen[dictionaryValue]+=XactionsDone[dictionaryValue]
-                self.childrenStateWin[dictionaryValue] += 0.5*XactionsDone[dictionaryValue]
+                self.childrenStateSeen[dictionaryValue]+=XactionsDone[x]
+                self.childrenStateWin[dictionaryValue] += 0.5*XactionsDone[x]
 
             for x in range(len(OstatesExplored)):
                 dictionaryValue=self.dictionary[OstatesExplored[x,0]]
-                self.childrenStateSeen[dictionaryValue]+=OactionsDone[dictionaryValue]
-                self.childrenStateWin[dictionaryValue] += 0.5*OactionsDone[dictionaryValue]
+                self.childrenStateSeen[dictionaryValue]+=OactionsDone[x]
+                self.childrenStateWin[dictionaryValue] += 0.5*OactionsDone[x]
+
+            print('Draw')
 
         print('ends at',nextPosition)
 
@@ -190,3 +197,4 @@ def PUCT_Algorithm(w, n, c, N, q, L):
 
 x = MonteCarlo()
 x.simulation('0000000000000000000')
+print(x.childrenStateWin)
