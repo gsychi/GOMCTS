@@ -29,17 +29,12 @@ class MonteCarlo():
         # We store the information in the simulation in a temporary array, before adding everything to the database.
         turns = 0
 
-        OstatesExplored = np.zeros((1,1))  # Store it as an array of directories for the seen stuff
+        OstatesExplored = np.array([['0000000000000000000']])  # Store it as an array of directories for the seen stuff
         OactionsDone = np.zeros((1,9))
-        XstatesExplored = np.zeros((1,1))  # Store it as an array of directories for the seen stuff
+        XstatesExplored = np.array([['0000000000000000000']])  # Store it as an array of directories for the seen stuff
         XactionsDone = np.zeros((1,9))
 
         position = originalPosition
-
-        board = TTTEnvironment()
-
-        board.state=TTTEnvironment.stringToState(board,position)
-        TTTEnvironment.setValues(board)
 
         #if game state is seen before,
 
@@ -47,19 +42,21 @@ class MonteCarlo():
 
         while(end==2):
 
+            board = TTTEnvironment()
+            board.state = TTTEnvironment.stringToState(board, position)
+            TTTEnvironment.setValues(board)
             legalMoves = board.legalMove()
 
             if position not in self.dictionary:
                 self.initializePosition(position)
 
             move = self.debugChooseMove(turns)
-            print(move)
 
             nextPosition = list(position)
 
-            if ((int(turns) + int(board.turn)) % 2) == 0:  # If it's X to move
+            if ((int(board.turn)) % 2) == 0:  # If it's X to move
                 nextPosition[move] = '1'
-            if ((int(turns) + int(board.turn)) % 2) == 1:  # If it's O to move
+            if ((int(board.turn)) % 2) == 1:  # If it's O to move
                 nextPosition[move + 9] = '1'
             nextPosition[-1] = str(1-int(nextPosition[-1]))
 
@@ -73,9 +70,8 @@ class MonteCarlo():
                     newAction[0, move]=1
                     XstatesExplored=np.concatenate((XstatesExplored, currentPosArray), axis=0)
                     XactionsDone=np.concatenate((XactionsDone,newAction),axis=0)
-                    print(str(XstatesExplored[-1]))
                 else:
-                    XstatesExplored[0] = (position)
+                    XstatesExplored[0,0] = position
                     XactionsDone[0,move]=1
                 #change tic tac toe board
             if ((int(turns) + int(board.turn)) % 2) == 1: # If it's O to move
@@ -86,7 +82,7 @@ class MonteCarlo():
                     OstatesExplored = np.concatenate((OstatesExplored, currentPosArray), axis=0)
                     OactionsDone = np.concatenate((OactionsDone, newAction), axis=0)
                 else:
-                    OstatesExplored[0] = (position)
+                    OstatesExplored[0] = position
                     OactionsDone[0,move] = 1
                 # change tic tac toe board
             turns += 1
@@ -98,36 +94,38 @@ class MonteCarlo():
 
         if end==1:
             for x in range(len(XstatesExplored)):
-                dictionaryValue=self.dictionary[str(XstatesExplored[x])]
+                dictionaryValue=self.dictionary[XstatesExplored[x,0]]
                 self.childrenStateSeen[dictionaryValue]+=XactionsDone[dictionaryValue]
                 self.childrenStateWin[dictionaryValue]+=XactionsDone[dictionaryValue]
 
             for x in range(len(OstatesExplored)):
-                dictionaryValue=self.dictionary[str(OstatesExplored[x])]
+                dictionaryValue=self.dictionary[OstatesExplored[x,0]]
                 self.childrenStateSeen[dictionaryValue]+=OactionsDone[dictionaryValue]
                 #no childrenStateWin because you lost
 
         if end==-1:
             for x in range(len(XstatesExplored)):
-                dictionaryValue=self.dictionary[str(XstatesExplored[x])]
+                dictionaryValue=self.dictionary[XstatesExplored[x,0]]
                 self.childrenStateSeen[dictionaryValue]+=XactionsDone[dictionaryValue]
                 # no childrenStateWin because you lost
 
             for x in range(len(OstatesExplored)):
-                dictionaryValue=self.dictionary[str(OstatesExplored[x])]
+                dictionaryValue=self.dictionary[OstatesExplored[x,0]]
                 self.childrenStateSeen[dictionaryValue]+=OactionsDone[dictionaryValue]
                 self.childrenStateWin[dictionaryValue] += OactionsDone[dictionaryValue]
 
         if end==2:
             for x in range(len(XstatesExplored)):
-                dictionaryValue=self.dictionary[str(XstatesExplored[x])]
+                dictionaryValue=self.dictionary[XstatesExplored[x,0]]
                 self.childrenStateSeen[dictionaryValue]+=XactionsDone[dictionaryValue]
                 self.childrenStateWin[dictionaryValue] += 0.5*XactionsDone[dictionaryValue]
 
             for x in range(len(OstatesExplored)):
-                dictionaryValue=self.dictionary[str(OstatesExplored[x])]
+                dictionaryValue=self.dictionary[OstatesExplored[x,0]]
                 self.childrenStateSeen[dictionaryValue]+=OactionsDone[dictionaryValue]
                 self.childrenStateWin[dictionaryValue] += 0.5*OactionsDone[dictionaryValue]
+
+        print('ends at',nextPosition)
 
 
     def debugChooseMove(self, x):
@@ -148,6 +146,14 @@ class MonteCarlo():
         self.childrenStateSeen=np.concatenate((self.childrenStateSeen,np.zeros((1, 9))), axis=0)
         self.childrenStateWin = np.concatenate((self.childrenStateWin, np.zeros((1, 9))), axis=0)
         self.childrenNNEvaluation = np.concatenate((self.childrenNNEvaluation, np.zeros((1, 9))), axis=0)
+
+    def intToPos(self,integ):
+        number=int(integ)
+        number = str(number)
+        length=len(number)
+        for x in range(19 - length):
+            number = '0' + number
+        return number
 
 # w stands for # of wins, n stands for number of times node has been visited.
 # N stands for number of times parent node is visited, and c is just an exploration constant that can be tuned.
@@ -183,5 +189,4 @@ def PUCT_Algorithm(w, n, c, N, q, L):
     return UCT * L
 
 x = MonteCarlo()
-print(x.dictionary)
 x.simulation('0000000000000000000')
