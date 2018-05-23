@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="02f5fc88-ce52-42a5-8bdb-e8054efa7383" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change beforePath="$PROJECT_DIR$/MCTS.py" afterPath="$PROJECT_DIR$/MCTS.py" />
       <change beforePath="$PROJECT_DIR$/TTTEnvironment.py" afterPath="$PROJECT_DIR$/TTTEnvironment.py" />
     </list>
@@ -15,36 +14,12 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="ANN.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ANN.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="239">
-              <caret line="93" column="31" lean-forward="false" selection-start-line="93" selection-start-column="31" selection-end-line="93" selection-end-column="31" />
-              <folding>
-                <element signature="e#303#326#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="TTTEnvironment.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/TTTEnvironment.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="153">
-              <caret line="74" column="0" lean-forward="false" selection-start-line="74" selection-start-column="0" selection-end-line="74" selection-end-column="0" />
+            <state relative-caret-position="85">
+              <caret line="99" column="45" lean-forward="false" selection-start-line="99" selection-start-column="45" selection-end-line="99" selection-end-column="45" />
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="UpdatedMCTS.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/UpdatedMCTS.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="23">
-              <caret line="61" column="37" lean-forward="true" selection-start-line="61" selection-start-column="37" selection-end-line="61" selection-end-column="37" />
-              <folding>
-                <element signature="e#0#18#0" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -52,8 +27,8 @@
       <file leaf-file-name="MCTS.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/MCTS.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="312">
-              <caret line="223" column="30" lean-forward="true" selection-start-line="223" selection-start-column="30" selection-end-line="223" selection-end-column="30" />
+            <state relative-caret-position="293">
+              <caret line="204" column="58" lean-forward="false" selection-start-line="204" selection-start-column="58" selection-end-line="204" selection-end-column="58" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -78,16 +53,17 @@
       <find>UCT_Al</find>
       <find>XstatesExplored</find>
       <find>chooseMove</find>
-      <find>makeMove</find>
-      <find>print</find>
       <find>legalMove</find>
       <find>updateState</find>
       <find>position</find>
       <find>nNNEv</find>
-      <find>PUCT</find>
       <find>gameSTate</find>
       <find>draw</find>
       <find>self</find>
+      <find>PUCT</find>
+      <find>print</find>
+      <find>makemove</find>
+      <find>makeMove</find>
     </findStrings>
     <replaceStrings>
       <replace>self.state</replace>
@@ -596,17 +572,25 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/UpdatedMCTS.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="23">
-          <caret line="61" column="37" lean-forward="true" selection-start-line="61" selection-start-column="37" selection-end-line="61" selection-end-column="37" />
+        <state relative-caret-position="270">
+          <caret line="111" column="35" lean-forward="true" selection-start-line="111" selection-start-column="35" selection-end-line="111" selection-end-column="35" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/TTTEnvironment.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="99" column="45" lean-forward="false" selection-start-line="99" selection-start-column="45" selection-end-line="99" selection-end-column="45" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/ANN.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="239">
+        <state relative-caret-position="1425">
           <caret line="93" column="31" lean-forward="false" selection-start-line="93" selection-start-column="31" selection-end-line="93" selection-end-column="31" />
           <folding>
             <element signature="e#303#326#0" expanded="true" />
@@ -614,18 +598,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/TTTEnvironment.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="74" column="0" lean-forward="false" selection-start-line="74" selection-start-column="0" selection-end-line="74" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/MCTS.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="312">
-          <caret line="223" column="30" lean-forward="true" selection-start-line="223" selection-start-column="30" selection-end-line="223" selection-end-column="30" />
+        <state relative-caret-position="293">
+          <caret line="204" column="58" lean-forward="false" selection-start-line="204" selection-start-column="58" selection-end-line="204" selection-end-column="58" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>

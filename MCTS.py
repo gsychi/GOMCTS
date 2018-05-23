@@ -196,7 +196,7 @@ class MonteCarlo():
         # here we will assume that there is a legalMove function that works as followed:
         # If the first row of a tic tac toe row is all taken, then it returns [0,0,0,1,1,1,1,1,1]
 
-        moveChoice = PUCT_Algorithm(self.childrenStateWin[index], self.childrenStateSeen[index], 2*np.ones((1,9)), np.sum(self.childrenStateSeen[index]), self.childrenNNEvaluation[index], legalMoves)
+        moveChoice = PUCT_Algorithm(self.childrenStateWin[index], self.childrenStateSeen[index], 2**0.5*np.ones((1,9)), np.sum(self.childrenStateSeen[index]), self.childrenNNEvaluation[index], legalMoves)
         return np.argmax(moveChoice)
 
     def initializePosition(self, pos): #adds pos to dictionary and concatenates new layers to MCTS arrays
@@ -213,12 +213,50 @@ class MonteCarlo():
             number = '0' + number
         return number
 
+    #returns the index of a move for competitive play
+    def competitiveMove(self, position):
+
+        board = TTTEnvironment()
+        board.state = TTTEnvironment.stringToState(board, position)
+        TTTEnvironment.setValues(board)
+
+        self.runSimulations(3200, position)
+        index = self.chooseMove(position, board.legalMove())
+        return int(index)
+
+    #returns the index of a move for training
+    def trainingMove(self, position):
+
+        board = TTTEnvironment()
+        board.state = TTTEnvironment.stringToState(board, position)
+        TTTEnvironment.setValues(board)
+
+        self.runSimulations(3200, position)
+        index = np.argmax(self.childrenStateSeen[self.dictionary[position]])
+        return int(index)
+
 
 x = MonteCarlo()
-print(x.runSimulations(1600, '0000000000000000000'))
+
+#INITIALIZE BOARD
+seriousGame = TTTEnvironment()
+while seriousGame.check_Win() == 2:
+    #MAKES MOVE
+    seriousGame.makeMove(x.competitiveMove(seriousGame.stateToString()))
+    seriousGame.turn = str((int(seriousGame.turn) + 1) % 2)
+    seriousGame.updateState()
+    print(seriousGame.Xstate)
+    print(seriousGame.Ostate)
+    print("-------")
+
+print(seriousGame.check_Win())
+print(seriousGame.Xstate)
+print(seriousGame.Ostate)
+
 
 print("\n\n---training data---")
-print(x.childrenStateSeen[0])
-print(x.childrenStateWin[0])
+print(x.dictionary)
+print(x.childrenStateSeen)
+print(x.childrenStateWin)
 
 #print(x.childrenNNEvaluation)

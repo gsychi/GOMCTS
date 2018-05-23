@@ -13,6 +13,9 @@ class TTTEnvironment:
     def setValues(self):
         self.Xstate, self.Ostate, self.turn=self.state
 
+    def updateState(self):
+        self.state = self.Xstate, self.Ostate, self.turn
+
     def stateToNumber(self):
         temp = self.state[0], self.state[1], self.state[2]
         number = ""  # 19 places- 9 for X, 9 for O, 1 for turn
@@ -93,12 +96,11 @@ class TTTEnvironment:
         self.state = stateX, stateO, turn
         return (self.state)
 
-    def makeMove(self,i):
-        if self.turn == 0:
+    def makeMove(self, i):
+        if self.turn == '0' or self.turn == 0:
             X_flat = self.Xstate.flatten()
             X_flat[i] = 1
             self.Xstate = X_flat.reshape(3, 3)
-
         else:
             O_flat = self.Ostate.flatten()
             O_flat[i] = 1
