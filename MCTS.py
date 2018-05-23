@@ -193,13 +193,25 @@ class MonteCarlo():
         return self.dictionary
 
     #choose argmax per (P)UCT Algorithm
-    def chooseMove(self, position, legalMoves, c):
+    def chooseMove(self, position, legalMoves, c, noise=False):
         index = self.dictionary[position]  # This returns a number based on the library
 
         # here we will assume that there is a legalMove function that works as followed:
         # If the first row of a tic tac toe row is all taken, then it returns [0,0,0,1,1,1,1,1,1]
+        moveChoice = PUCT_Algorithm(self.childrenStateWin[index], self.childrenStateSeen[index], c * np.ones((1, 9)),
+                                    np.sum(self.childrenStateSeen[index]), self.childrenNNEvaluation[index], legalMoves)
 
-        moveChoice = PUCT_Algorithm(self.childrenStateWin[index], self.childrenStateSeen[index], c*np.ones((1,9)), np.sum(self.childrenStateSeen[index]), self.childrenNNEvaluation[index], legalMoves)
+
+        #adding noise
+        temp = TTTEnvironment()
+        temp.state = TTTEnvironment.stringToState(temp, position)
+        temp.setValues()
+        noiseConstant = (5-np.sum(temp.Xstate.flatten()))/50
+        if noise==True:
+            noise = np.random.rand(1,9)*noiseConstant*2-noiseConstant
+            moveChoice = moveChoice + noise
+
+
         return np.argmax(moveChoice)
 
     def initializePosition(self, pos): #adds pos to dictionary and concatenates new layers to MCTS arrays
@@ -208,7 +220,7 @@ class MonteCarlo():
         self.childrenStateWin = np.concatenate((self.childrenStateWin, np.zeros((1, 9))), axis=0)
         board = TTTEnvironment()
         board.state = TTTEnvironment.stringToState(board, pos)
-        TTTEnvironment.setValues(board)
+        board.setValues()
         winPercentages = self.neuralNetwork.predict(board.stateToArray())
         self.childrenNNEvaluation = np.concatenate((self.childrenNNEvaluation, winPercentages), axis=0)
 
@@ -238,10 +250,10 @@ class MonteCarlo():
 
         board = TTTEnvironment()
         board.state = TTTEnvironment.stringToState(board, position)
-        TTTEnvironment.setValues(board)
+        board.setValues()
 
         self.runSimulations(sims, position)
-        index = self.chooseMove(position, board.legalMove(), 2**0.5)
+        index = self.chooseMove(position, board.legalMove(), 0)
         return int(index)
 
     #returns the index of a move for training
@@ -249,13 +261,15 @@ class MonteCarlo():
 
         board = TTTEnvironment()
         board.state = TTTEnvironment.stringToState(board, position)
-        TTTEnvironment.setValues(board)
+        board.setValues()
 
         self.runSimulations(sims, position)
-        index = np.argmax(self.childrenStateSeen[self.dictionary[position]])
+        #index = np.argmax(self.childrenStateSeen[self.dictionary[position]])
+        noise = np.random.rand(1,9)
+        index = self.chooseMove(position, board.legalMove(), 2 ** 0.5, True)
         return int(index)
 
-    def trainingGame(self, playouts):
+    def trainingGame(self, playouts, printLog=False):
 
         firstMove = True
 
@@ -269,7 +283,10 @@ class MonteCarlo():
         seriousGame = TTTEnvironment()
         while seriousGame.check_Win() == 2:
             # MAKES MOVE
-            index = self.competitiveMove(playouts, seriousGame.stateToString())
+            if printLog == True:
+                index = self.competitiveMove(playouts, seriousGame.stateToString())
+            else:
+                index = self.trainingMove(playouts, seriousGame.stateToString())
             # push state first
             if int(seriousGame.turn) == 0:  # x moved
                 if firstMove is True:
@@ -305,14 +322,16 @@ class MonteCarlo():
                     OactionsDone = np.concatenate((OactionsDone, newAction), axis=0)
 
             seriousGame.updateState()
+            if printLog == True:
+                print(seriousGame.Xstate)
+                print(seriousGame.Ostate)
+                print("-------")
+
+        if printLog == True:
+            print(seriousGame.check_Win())
             print(seriousGame.Xstate)
             print(seriousGame.Ostate)
-            print("-------")
-
-        # print(seriousGame.check_Win())
-        # print(seriousGame.Xstate)
-        # print(seriousGame.Ostate)
-
+        print(seriousGame.stateToString())
         if seriousGame.check_Win() == 0:
             XactionsWin = XactionsDone * 0.5
             OactionsWin = OactionsDone * 0.5
@@ -369,22 +388,25 @@ class MonteCarlo():
 brain = NeuralNetwork(np.zeros((1, 19)), np.zeros((1, 9)), 50)
 x = MonteCarlo(brain)
 
-for i in range(300):
+for i in range(3000):
     print("GENERATION " + str(i+1))
-    #40 games, 50 playouts per move
-    inputs, outputs = x.createDatabaseForNN(100, 2)
+    #450 games, 25 playouts for each move
+    inputs, outputs = x.createDatabaseForNN(450, 25)
     brain = NeuralNetwork(inputs, outputs, 80)
+    print(len(inputs))
     print("Training Network with previous data...")
     brain.trainNetwork(30000, 0.001)
     print("Self-learning is complete.")
     correct = (np.argmax(brain.predict(inputs), axis=1) == np.argmax(outputs, axis=1)).sum()
     print("Accuracy: ", correct/len(inputs))
+    print("Total datasets: ", len(inputs))
     #Update the network onto MCTS
     x.neuralNetwork = brain
     x.updateEvals()
-    print(x.dictionary)
+
+    x.runSimulations(5000, '0000000000000000000')
     print("GAMES BY NEW NETWORK")
-    x.trainingGame(5000)
+    x.trainingGame(12000, True)
 
 #This checks accuracy of neural network training hmm.
 #print(np.argmax(brain.predict(inputs), axis=1))
