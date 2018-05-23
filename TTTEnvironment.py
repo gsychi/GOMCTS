@@ -13,8 +13,8 @@ class TTTEnvironment:
     def setValues(self):
         self.Xstate, self.Ostate, self.turn=self.state
 
-    def stateToNumber(gameState):
-        temp = gameState[0], gameState[1], gameState[2]
+    def stateToNumber(self):
+        temp = self.state[0], self.state[1], self.state[2]
         number = ""  # 19 places- 9 for X, 9 for O, 1 for turn
         for x in range(18):
             # Tells whether to look at matrix X or matrix O
@@ -37,8 +37,8 @@ class TTTEnvironment:
         number = number + str(int(temp[2]))
         return int(number)
 
-    def stateToString(gameState):
-        temp = gameState[0], gameState[1], gameState[2]
+    def stateToString(self):
+        temp = self.state[0], self.state[1], self.state[2]
         number = ""  # 19 places- 9 for X, 9 for O, 1 for turn
         for x in range(18):
             # Tells whether to look at matrix X or matrix O
@@ -68,8 +68,8 @@ class TTTEnvironment:
             if (matrix == 1):
                 stateO[row, column] = number[x]
         turn = number[-1]
-        gameState = stateX, stateO, turn
-        return (gameState)
+        self.state = stateX, stateO, turn
+        return (self.state)
 
     def stringToState(self, string):
         length = len(string)
@@ -90,8 +90,8 @@ class TTTEnvironment:
             if (matrix == 1):
                 stateO[row, column] = number[x]
         turn = number[-1]
-        gameState = stateX, stateO, turn
-        return (gameState)
+        self.state = stateX, stateO, turn
+        return (self.state)
 
     def makeMove(self,i):
         if self.turn == 0:

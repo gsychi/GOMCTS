@@ -1,6 +1,41 @@
 import numpy as np
 from TTTEnvironment import TTTEnvironment
 
+
+# w stands for # of wins, n stands for number of times node has been visited.
+# N stands for number of times parent node is visited, and c is just an exploration constant that can be tuned.
+# Q is the evaluation from 0 to 1 of the neural network
+# L is a number of value 0 or 1. If the move is legal, then this value is 1. If the move is not, then this value is 0.
+def UCT_Algorithm(w, n, c, N, q, L):
+    # Provides a win rate score from 0 to 1
+    selfPlayEvaluation = 0.5
+    selfPlayEvaluation = np.divide(w, n, out=np.zeros_like(w), where=n!=0)
+    nnEvaluation = q
+    winRate = (nnEvaluation + selfPlayEvaluation) / 2
+
+    # Exploration
+    exploration = c * np.sqrt(np.log(N) / n)
+
+    UCT = winRate + exploration
+    return UCT * L
+
+
+#UCT Algorithm used by Alpha Zero. Use this for now!!
+def PUCT_Algorithm(w, n, c, N, q, L):
+    # Provides a win rate score from 0 to 1
+    selfPlayEvaluation = 0.5
+    selfPlayEvaluation = np.divide(w, n, out=np.zeros_like(w), where=n != 0)
+    nnEvaluation = q
+    winRate = (nnEvaluation + selfPlayEvaluation) / 2
+
+    # Exploration
+    exploration = c * np.sqrt(N)/(1+n)
+
+    UCT = winRate + exploration
+    return UCT * L
+
+
+
 class MonteCarlo():
 
     # We will use three lists:
@@ -21,7 +56,7 @@ class MonteCarlo():
 
         self.childrenStateSeen = np.zeros((1, 9))  # This is a 2D array
         self.childrenStateWin = np.zeros((1, 9))  # This is a 2D array
-        self.childrenNNEvaluation = np.ones((1, 9))  # This is a 2D array
+        self.childrenNNEvaluation = np.random.rand(1, 9)  # This is a 2D array
 
     def addToDictionary(self, position):
         self.dictionary[position]=len(self.dictionary)
@@ -46,14 +81,20 @@ class MonteCarlo():
             board = TTTEnvironment()
             board.state = TTTEnvironment.stringToState(board, position)
             TTTEnvironment.setValues(board)
-            legalMoves = board.legalMove()
 
             if position not in self.dictionary:
                 self.initializePosition(position)
 
-            move = self.debugChooseMove(turns)
-
             nextPosition = list(position)
+
+            """
+            print("STATE: " + position)
+            print(board.Xstate)
+            print(board.Ostate)
+            """
+
+            #move = self.debugChooseMove(turns)
+            move = self.chooseMove(position, board.legalMove())
 
             if ((int(board.turn)) % 2) == 0:  # If it's X to move
                 nextPosition[move] = '1'
@@ -105,22 +146,22 @@ class MonteCarlo():
                 self.childrenStateSeen[dictionaryValue]+=OactionsDone[x]
                 #no childrenStateWin because you lost
 
-            print('X wins')
+            #print('X wins')
 
         if end==-1:
             for x in range(len(XstatesExplored)):
                 dictionaryValue=self.dictionary[XstatesExplored[x,0]]
-                self.childrenStateSeen[dictionaryValue]+=XactionsDone[x]
+                self.childrenStateSeen[dictionaryValue] += XactionsDone[x]
                 # no childrenStateWin because you lost
 
-            print('O wins')
+            #print('O wins')
 
             for x in range(len(OstatesExplored)):
                 dictionaryValue=self.dictionary[OstatesExplored[x,0]]
-                self.childrenStateSeen[dictionaryValue]+=OactionsDone[x]
+                self.childrenStateSeen[dictionaryValue] += OactionsDone[x]
                 self.childrenStateWin[dictionaryValue] += OactionsDone[x]
 
-        if end==2:
+        if end==0:
             for x in range(len(XstatesExplored)):
                 dictionaryValue=self.dictionary[XstatesExplored[x,0]]
                 self.childrenStateSeen[dictionaryValue]+=XactionsDone[x]
@@ -131,13 +172,22 @@ class MonteCarlo():
                 self.childrenStateSeen[dictionaryValue]+=OactionsDone[x]
                 self.childrenStateWin[dictionaryValue] += 0.5*OactionsDone[x]
 
-            print('Draw')
+            #print('Draw')
 
-        print('ends at',nextPosition)
+        # just debugging
+        #print('ends at', nextPosition)
+        #print("X:")
+        #print(board.Xstate)
+        #print("O:")
+        #print(board.Ostate)
+        #if end==0:
+            #print("TOTAL = ")
+            #print(np.sum((board.Xstate, board.Ostate), axis=0))
 
-
-    def debugChooseMove(self, x):
-        return x
+    def runSimulations(self, sims, position):
+        for i in range(sims):
+            self.simulation(position)
+        return self.dictionary
 
     #choose argmax per (P)UCT Algorithm
     def chooseMove(self, position, legalMoves):
@@ -146,56 +196,29 @@ class MonteCarlo():
         # here we will assume that there is a legalMove function that works as followed:
         # If the first row of a tic tac toe row is all taken, then it returns [0,0,0,1,1,1,1,1,1]
 
-        moveChoice = PUCT_Algorithm(self.childrenStateWin[index], self.childrenStateSeen[index], 2, np.sum(self.childrenStateSeen[index]), self.childrenNNEvaluation[index], legalMoves)
+        moveChoice = PUCT_Algorithm(self.childrenStateWin[index], self.childrenStateSeen[index], 2*np.ones((1,9)), np.sum(self.childrenStateSeen[index]), self.childrenNNEvaluation[index], legalMoves)
         return np.argmax(moveChoice)
 
     def initializePosition(self, pos): #adds pos to dictionary and concatenates new layers to MCTS arrays
         self.addToDictionary(pos)
-        self.childrenStateSeen=np.concatenate((self.childrenStateSeen,np.zeros((1, 9))), axis=0)
+        self.childrenStateSeen = np.concatenate((self.childrenStateSeen,np.zeros((1, 9))), axis=0)
         self.childrenStateWin = np.concatenate((self.childrenStateWin, np.zeros((1, 9))), axis=0)
-        self.childrenNNEvaluation = np.concatenate((self.childrenNNEvaluation, np.zeros((1, 9))), axis=0)
+        self.childrenNNEvaluation = np.concatenate((self.childrenNNEvaluation, np.random.rand(1, 9)), axis=0)
 
-    def intToPos(self,integ):
-        number=int(integ)
+    def intToPos(self, integ):
+        number = int(integ)
         number = str(number)
         length=len(number)
         for x in range(19 - length):
             number = '0' + number
         return number
 
-# w stands for # of wins, n stands for number of times node has been visited.
-# N stands for number of times parent node is visited, and c is just an exploration constant that can be tuned.
-# Q is the evaluation from 0 to 1 of the neural network
-# L is a number of value 0 or 1. If the move is legal, then this value is 1. If the move is not, then this value is 0.
-def UCT_Algorithm(w, n, c, N, q, L):
-    # Provides a win rate score from 0 to 1
-    selfPlayEvaluation = 0.5
-    selfPlayEvaluation = np.divide(w, n, out=np.zeros_like(w), where=n!=0)
-    nnEvaluation = q
-    winRate = (nnEvaluation + selfPlayEvaluation) / 2
-
-    # Exploration
-    exploration = c * np.sqrt(np.log(N) / n)
-
-    UCT = winRate + exploration
-    return UCT * L
-
-
-
-#UCT Algorithm used by Alpha Zero
-def PUCT_Algorithm(w, n, c, N, q, L):
-    # Provides a win rate score from 0 to 1
-    selfPlayEvaluation = 0.5
-    selfPlayEvaluation = np.divide(w, n, out=np.zeros_like(w), where=n != 0)
-    nnEvaluation = q
-    winRate = (nnEvaluation + selfPlayEvaluation) / 2
-
-    # Exploration
-    exploration = c * np.sqrt(N)/(1+n)
-
-    UCT = winRate + exploration
-    return UCT * L
 
 x = MonteCarlo()
-x.simulation('0000000000000000000')
-print(x.childrenStateWin)
+print(x.runSimulations(1600, '0000000000000000000'))
+
+print("\n\n---training data---")
+print(x.childrenStateSeen[0])
+print(x.childrenStateWin[0])
+
+#print(x.childrenNNEvaluation)
