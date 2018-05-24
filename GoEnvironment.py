@@ -15,6 +15,10 @@ class GoEnvironment:
         self.wSurChains = []
         self.bChains = []
         self.bSurChains = []
+        self.blankStones = []
+        self.blankSurStones = []
+        self.blankChains = []
+        self.blankSurChains = []
         self.illegalKo = 999
         self.turnOfIllegalKo = 999
 
@@ -114,6 +118,49 @@ class GoEnvironment:
 
         return ba
 
+    def isIndividual(self,i,j,color, map): #return liberties of each stone
+        flag = True
+        if color == 0: #if finding for black
+            if i!=0:
+                if(map[i-1][j][0] == 1):
+                    flag = False
+            if j!=0:
+                if (map[i][j-1][0] == 1):
+                    flag = False
+            if j!=8:
+                if (map[i][j+1][0] == 1):
+                    flag = False
+            if i!=8:
+                if (map[i + 1][j][0] == 1):
+                    flag = False
+        elif color == 1:
+            if i!=0:
+                if(map[i-1][j][1] == 1):
+                    flag = False
+            if j!=0:
+                if (map[i][j-1][1] == 1):
+                    flag = False
+            if j!=8:
+                if (map[i][j+1][1] == 1):
+                    flag = False
+            if i!=8:
+                if (map[i + 1][j][1] == 1):
+                    flag = False
+        elif color == -1:
+            if i!=0:
+                if(map[i-1][j] == 1):
+                    flag = False
+            if j!=0:
+                if (map[i][j-1] == 1):
+                    flag = False
+            if j!=8:
+                if (map[i][j+1] == 1):
+                    flag = False
+            if i!=8:
+                if (map[i + 1][j] == 1):
+                    flag = False
+        return flag
+
     def searchSurroundings(self, i, j, k):
         required = 4
         stoneSurround = 0
@@ -162,7 +209,17 @@ class GoEnvironment:
                 black_stone_map[i][j] = int(self.board[i][j][0])
 
         self.wChains = self.findChains(white_stone_map)
+        for i in range(9):
+            for j in range(9):
+                if i== 1 and j == 0:
+                    print(self.isIndividual(i,j,1,self.board))
+                if self.isIndividual(i,j,1,self.board) == True and self.board[i][j][1] == 1:
+                    self.wChains.append([9*i+j])
         self.bChains = self.findChains(black_stone_map)
+        for i in range(9):
+            for j in range(9):
+                if self.isIndividual(i,j,0,self.board) == True and self.board[i][j][0] == 1:
+                    self.bChains.append([9*i+j])
         self.wSurChains = self.surArray(self.wChains)
         self.bSurChains = self.surArray(self.bChains)
 
@@ -202,11 +259,8 @@ class GoEnvironment:
 
     def surroundings(self, chain):
         wrongsurroundings = []
-        print('chain',chain)
         for i in range(len(chain)):
             wrongsurroundings.append((self.surroundReq(int(int(chain[i]/9)),int(int(chain[i]%9)))))
-
-        print('wrongsurroundings',wrongsurroundings)
         flat_sur = []
 
         for x in wrongsurroundings:
@@ -223,7 +277,6 @@ class GoEnvironment:
         sur = []
 
         for i in range(len(unique_list)):
-            print(np.in1d([unique_list[i]],chain))
             if np.in1d([unique_list[i]],chain) == False:
                 sur.append(unique_list[i])
 
@@ -292,6 +345,52 @@ class GoEnvironment:
             print(self.wChains[i])
             print('Surrounding Stones: ' , self.wSurChains[i])
 
+    def checkWin(self):
+        score_white = 0
+        score_black = 0
+        for i in range(9):
+            for j in range(9):
+                score_white += int(self.board[i][j][1])
+                score_black += int(self.board[i][j][0])
+
+        blank_stone_map = np.ones((9,9))
+
+        for i in range(9):
+            for j in range(9):
+                if int(self.board[i][j][1]) == 0 and int(self.board[i][j][0]) == 0:
+                    blank_stone_map[i][j] = 1
+                else:
+                    blank_stone_map[i][j] = 0
+
+        print(blank_stone_map)
+        self.blankChains = self.findChains(blank_stone_map)
+        for i in range(9):
+            for j in range(9):
+                if self.isIndividual(i,j,-1,blank_stone_map) == True and blank_stone_map[i][j] == 1:
+                    self.blankChains.append([9*i+j])
+
+        unique = []
+        for i in self.blankChains:
+            i.sort(key=int)
+            if i not in unique:
+                unique.append(i)
+
+        self.blankChains = unique
+        print(self.blankChains)
+        self.blankSurChains = self.surArray(self.blankChains)
+
+        for i in range(len(self.blankSurChains)):
+            if self.ifSurroundedByB(self.blankSurChains[i]) == True:
+                score_black+=len(self.blankChains[i])
+            elif self.ifSurroundedByW(self.blankSurChains[i]) == True:
+                score_white+=len(self.blankChains[i])
+
+        print('Black Score: ' ,score_black)
+        print('White_Score: ' ,score_white)
+
+
+
+
 
 go = GoEnvironment()
 go.customMove('A3','B')
@@ -304,6 +403,14 @@ go.customMove('B4','W')
 go.customMove('B2','W')
 go.customMove('C4','W')
 go.customMove('C2','W')
+go.customMove('D3','W')
+go.customMove('A4','W')
+go.customMove('A8','B')
+go.customMove('B8','W')
+go.customMove('D6','B')
+go.customMove('B9','B')
+go.customMove('B7','B')
+go.customMove('C8','B')
 
 go.printBoard()
 go.locateChains()
@@ -311,7 +418,9 @@ print(go.wChains)
 print(go.bChains)
 print(go.wSurChains)
 print(go.bSurChains)
-
+go.captureDeadStonesB()
+go.captureDeadStonesW()
 go.updateBoard()
 go.printBoard()
+go.checkWin()
 

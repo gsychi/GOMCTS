@@ -2,16 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="81188508-aed1-49ea-a116-81ea77a4bab2" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/GoEnvironment.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/UpdatedMCTS.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ourNN.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/GOMCTS.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/GOMCTS.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ANN.py" beforeDir="false" afterPath="$PROJECT_DIR$/ANN.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CNN.py" beforeDir="false" afterPath="$PROJECT_DIR$/CNN.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MCTS.py" beforeDir="false" afterPath="$PROJECT_DIR$/MCTS.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TTTEnvironment.py" beforeDir="false" afterPath="$PROJECT_DIR$/TTTEnvironment.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GoEnvironment.py" beforeDir="false" afterPath="$PROJECT_DIR$/GoEnvironment.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -34,8 +25,8 @@
       <file leaf-file-name="CNN.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/CNN.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-989">
-              <caret line="11" column="16" lean-forward="true" selection-start-line="11" selection-start-column="16" selection-end-line="11" selection-end-column="16" />
+            <state relative-caret-position="120">
+              <caret line="11" column="16" selection-start-line="11" selection-start-column="16" selection-end-line="11" selection-end-column="16" />
               <folding>
                 <element signature="e#0#64#0" expanded="true" />
               </folding>
@@ -43,7 +34,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MCTS.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="MCTS.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/MCTS.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="676">
@@ -52,7 +43,33 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="GoEnvironment.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/GoEnvironment.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="202">
+              <caret line="370" lean-forward="true" selection-start-line="370" selection-end-line="370" />
+            </state>
+          </provider>
+        </entry>
+      </file>
     </leaf>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>bstones</find>
+      <find>locatechains</find>
+      <find>+</find>
+      <find>updateb</find>
+      <find>surroundreq</find>
+      <find>bchain</find>
+      <find>self.board</find>
+      <find>isindividual</find>
+      <find>blanksurchains</find>
+      <find>surchains</find>
+    </findStrings>
+    <replaceStrings>
+      <replace>map</replace>
+    </replaceStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -62,6 +79,7 @@
       <list>
         <option value="$PROJECT_DIR$/ANN.py" />
         <option value="$PROJECT_DIR$/MCTS.py" />
+        <option value="$PROJECT_DIR$/GoEnvironment.py" />
       </list>
     </option>
   </component>
@@ -109,6 +127,54 @@
       </list>
     </option>
   </component>
+  <component name="RunManager" selected="Python.GoEnvironment">
+    <configuration name="GoEnvironment" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="GOMCTS" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/GoEnvironment.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+    </configuration>
+    <configuration name="arraysetops" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="GOMCTS" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$USER_HOME$/Dropbox/문서/Exeter Senior Year/CompSci/Ex_Files_Machine_Learning_EssT_ValueEstimate/Exercise Files/venv/lib/python3.6/site-packages/numpy/lib" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$USER_HOME$/Dropbox/문서/Exeter Senior Year/CompSci/Ex_Files_Machine_Learning_EssT_ValueEstimate/Exercise Files/venv/lib/python3.6/site-packages/numpy/lib/arraysetops.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+    </configuration>
+    <list>
+      <item itemvalue="Python.GoEnvironment" />
+      <item itemvalue="Python.arraysetops" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.GoEnvironment" />
+        <item itemvalue="Python.arraysetops" />
+      </list>
+    </recent_temporary>
+  </component>
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -126,16 +192,16 @@
     <frame x="0" y="23" width="1440" height="827" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.25" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
-      <window_info anchor="bottom" id="Run" order="2" />
       <window_info anchor="bottom" id="Version Control" order="7" />
       <window_info anchor="bottom" id="Python Console" order="7" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.38379815" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Terminal" order="7" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.3997344" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -152,6 +218,30 @@
     <entry file="file://$PROJECT_DIR$/ANN.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="210">
+          <caret line="16" selection-start-line="16" selection-end-line="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/CNN.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="11" column="16" lean-forward="true" selection-start-line="11" selection-start-column="16" selection-end-line="11" selection-end-column="16" />
+          <folding>
+            <element signature="e#0#64#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MCTS.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="6105">
+          <caret line="409" column="31" selection-start-line="409" selection-start-column="31" selection-end-line="409" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ANN.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
           <caret line="16" lean-forward="true" selection-start-line="16" selection-end-line="16" />
         </state>
       </provider>
@@ -165,8 +255,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/CNN.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-989">
-          <caret line="11" column="16" lean-forward="true" selection-start-line="11" selection-start-column="16" selection-end-line="11" selection-end-column="16" />
+        <state relative-caret-position="120">
+          <caret line="11" column="16" selection-start-line="11" selection-start-column="16" selection-end-line="11" selection-end-column="16" />
           <folding>
             <element signature="e#0#64#0" expanded="true" />
           </folding>
@@ -177,6 +267,20 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="676">
           <caret line="409" column="31" selection-start-line="409" selection-start-column="31" selection-end-line="409" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Dropbox/문서/Exeter Senior Year/CompSci/Ex_Files_Machine_Learning_EssT_ValueEstimate/Exercise Files/venv/lib/python3.6/site-packages/numpy/lib/arraysetops.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="97">
+          <caret line="236" column="21" lean-forward="true" selection-start-line="236" selection-start-column="21" selection-end-line="236" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/GoEnvironment.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="202">
+          <caret line="370" lean-forward="true" selection-start-line="370" selection-end-line="370" />
         </state>
       </provider>
     </entry>
