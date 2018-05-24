@@ -322,8 +322,7 @@ class MonteCarlo():
 
             seriousGame.updateState()
             if printLog == True:
-                print(seriousGame.Xstate)
-                print(seriousGame.Ostate)
+                self.printBoard(seriousGame.Xstate, seriousGame.Ostate)
                 print("-------")
 
         if printLog == True:
@@ -383,17 +382,29 @@ class MonteCarlo():
         outputs = np.divide(outputWin, outputSeen, out=np.zeros_like(outputWin), where=outputSeen != 0)
         return inputs, outputs
 
+    def printBoard(self, a, b):
+        for i in range(3):
+            for j in range(3):
+                if (a[i][j]==1):
+                    print("X", ' ', end='')
+                elif (b[i][j] == 1):
+                     print("O", ' ', end='')
+                else:
+                    print("+", " ", end='')
+            print(" ")
 
 #TESTING THE SELF-LEARNING PROCESS
 
 brain = NeuralNetwork(np.zeros((1, 19)), np.zeros((1, 9)), 50)
 x = MonteCarlo(brain)
+print("GAMES BY INITIAL NET")
+x.trainingGame(12000, True)
 
 for i in range(3000):
     print("GENERATION " + str(i+1))
     #450 games, 25 playouts for each move
-    inputs, outputs = x.createDatabaseForNN(220, 25)
-    brain = NeuralNetwork(inputs, outputs, 80)
+    inputs, outputs = x.createDatabaseForNN(800, 25)
+    brain = NeuralNetwork(inputs, outputs, 30)
     print(len(inputs))
     print("Training Network with previous data...")
     brain.trainNetwork(30000, 0.001)
