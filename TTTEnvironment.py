@@ -10,8 +10,21 @@ class TTTEnvironment:
         self.turn = 0  # 0 for X to move, 1 for O to move
         self.state = self.Xstate, self.Ostate, self.turn
 
-    def stateToNumber(gameState):
-        temp = gameState[0], gameState[1], gameState[2]
+    def setValues(self):
+        self.Xstate, self.Ostate, self.turn=self.state
+
+    def updateState(self):
+        self.state = self.Xstate, self.Ostate, self.turn
+
+    def stateToArray(self):
+        X_flat = self.Xstate.flatten()
+        O_flat = self.Ostate.flatten()
+        turn = int(self.turn)
+        array = np.append(np.concatenate((X_flat, O_flat), axis=0), turn)
+        return array
+
+    def stateToNumber(self):
+        temp = self.state[0], self.state[1], self.state[2]
         number = ""  # 19 places- 9 for X, 9 for O, 1 for turn
         for x in range(18):
             # Tells whether to look at matrix X or matrix O
@@ -22,7 +35,31 @@ class TTTEnvironment:
         number = number + str(int(temp[2]))
         return int(number)
 
-    def numberToState(number):
+    def stateToNumber(self):
+        temp = self.state[0], self.state[1], self.state[2]
+        number = ""  # 19 places- 9 for X, 9 for O, 1 for turn
+        for x in range(18):
+            # Tells whether to look at matrix X or matrix O
+            matrix = int((x - (x % 9)) / 9)
+            column = x % 3  # Tells you the column of the array
+            row = int((x - column) / 3) % 3  # Tells you the row of the array
+            number = number + str(int(temp[matrix][row, column]))
+        number = number + str(int(temp[2]))
+        return int(number)
+
+    def stateToString(self):
+        temp = self.state[0], self.state[1], self.state[2]
+        number = ""  # 19 places- 9 for X, 9 for O, 1 for turn
+        for x in range(18):
+            # Tells whether to look at matrix X or matrix O
+            matrix = int((x - (x % 9)) / 9)
+            column = x % 3  # Tells you the column of the array
+            row = int((x - column) / 3) % 3  # Tells you the row of the array
+            number = number + str(int(temp[matrix][row, column]))
+        number = number + str(int(temp[2]))
+        return number
+
+    def numberToState(self, number):
         length = int(np.log10(number + 1)) + 1
         number = str(number)
         for x in range(19 - length):
@@ -41,15 +78,36 @@ class TTTEnvironment:
             if (matrix == 1):
                 stateO[row, column] = number[x]
         turn = number[-1]
-        gameState = stateX, stateO, turn
-        return (gameState)
+        self.state = stateX, stateO, turn
+        return (self.state)
 
-    def makeMove(self,i):
-        if self.turn == 0:
+    def stringToState(self, string):
+        length = len(string)
+        number=string[:]
+        for x in range(19 - length):
+            number = '0' + number
+        number = str(number)
+        stateX = np.ndarray((3, 3))
+        stateO = np.ndarray((3, 3))
+        turn = 0
+        for x in range(18):
+            matrix = x % 9  # Tells whether to look at matrix X or matrix O
+            matrix = int((x - (x % 9)) / 9)
+            column = x % 3  # Tells you the column of the array
+            row = int((x - column) / 3) % 3  # Tells you the row of the array
+            if (matrix == 0):
+                stateX[row, column] = number[x]
+            if (matrix == 1):
+                stateO[row, column] = number[x]
+        turn = number[-1]
+        self.state = stateX, stateO, turn
+        return (self.state)
+
+    def makeMove(self, i):
+        if self.turn == '0' or self.turn == 0:
             X_flat = self.Xstate.flatten()
             X_flat[i] = 1
             self.Xstate = X_flat.reshape(3, 3)
-
         else:
             O_flat = self.Ostate.flatten()
             O_flat[i] = 1
@@ -100,16 +158,17 @@ class TTTEnvironment:
 
         return 0
 
-newenv = TTTEnvironment()
-print(newenv.legalMove())
-newenv.makeMove(0)
-print(newenv.Xstate)
-newenv.turn = 1
-newenv.makeMove(3)
-print(newenv.Xstate)
-print(newenv.Ostate)
-print(newenv.check_Win())
-newenv.turn = 0
-newenv.makeMove(1)
-newenv.makeMove(2)
-print(newenv.check_Win())
+def main():
+    newenv = TTTEnvironment()
+    print(newenv.legalMove())
+    newenv.makeMove(0)
+    print(newenv.Xstate)
+    newenv.turn = 1
+    newenv.makeMove(3)
+    print(newenv.Xstate)
+    print(newenv.Ostate)
+    print(newenv.check_Win())
+    newenv.turn = 0
+    newenv.makeMove(1)
+    newenv.makeMove(2)
+    print(newenv.check_Win())
