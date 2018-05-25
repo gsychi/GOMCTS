@@ -206,7 +206,7 @@ class MonteCarlo():
         temp = TTTEnvironment()
         temp.state = TTTEnvironment.stringToState(temp, position)
         temp.setValues()
-        noiseConstant = 0.08/(2*(1+np.sum(temp.Xstate.flatten())))
+        noiseConstant = 0.11/(2.3*(1+np.sum(temp.Xstate.flatten())))
         if noise==True:
             noise = np.random.rand(1, 9)*noiseConstant*2-noiseConstant
             moveChoice = moveChoice + noise
@@ -398,7 +398,7 @@ class MonteCarlo():
 brain = NeuralNetwork(np.zeros((1, 19)), np.zeros((1, 9)), 50)
 x = MonteCarlo(brain)
 print("GAMES BY INITIAL NET")
-x.trainingGame(12000, True)
+x.trainingGame(5000, True)
 
 for i in range(3000):
     print("GENERATION " + str(i+1))
@@ -407,7 +407,7 @@ for i in range(3000):
     brain = NeuralNetwork(inputs, outputs, 30)
     print(len(inputs))
     print("Training Network with previous data...")
-    brain.trainNetwork(30000, 0.001)
+    brain.trainNetwork(15000, 0.005)
     print("Self-learning is complete.")
     correct = (np.argmax(brain.predict(inputs), axis=1) == np.argmax(outputs, axis=1)).sum()
     print("Accuracy: ", correct/len(inputs))
@@ -418,4 +418,4 @@ for i in range(3000):
 
     x.runSimulations(5000, '0000000000000000000')
     print("GAMES BY NEW NETWORK")
-    x.trainingGame(12000, True)
+    x.trainingGame(5000, True)

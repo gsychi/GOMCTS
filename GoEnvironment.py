@@ -389,9 +389,6 @@ class GoEnvironment:
         print('White_Score: ' ,score_white)
 
 
-
-
-
 go = GoEnvironment()
 go.customMove('A3','B')
 go.customMove('B3','B')
