@@ -434,9 +434,11 @@ class MonteCarlo():
         for m in range(trials):
             xScore += MonteCarlo.playEachOther(x,y)
             xScore -= MonteCarlo.playEachOther(y,x)
-        if xScore >= 0:
+        if xScore > 0:
+            print("New network was stronger, obtained a score of +", xScore)
             return x
         else:
+            print("New network was of equal strength or weaker, obtained a score of +", xScore)
             return y
 
 #TESTING THE SELF-LEARNING PROCESS
@@ -449,13 +451,13 @@ x.trainingGame(5000, True)
 for i in range(3000):
     print("GENERATION " + str(i+1))
     #450 games, 25 playouts for each move
-    inputs, outputs = x.createDatabaseForNN(800, 20)
+    inputs, outputs = x.createDatabaseForNN(250, 80)
     previousBrain = copy.deepcopy(brain)
     brain = NeuralNetwork(inputs, outputs, 50)
     print(len(inputs))
     print("Testing new MCTS...")
     print("Training Network with previous data...")
-    brain.trainNetwork(15000, 0.003)
+    brain.trainNetwork(25000, 0.003)
     print("Comparing New Neural Net...")
     brain = MonteCarlo.testEachOther(brain, previousBrain, 5)
     print("Self-learning is complete.")
@@ -466,6 +468,5 @@ for i in range(3000):
     x.neuralNetwork = brain
     x.updateEvals()
 
-    x.runSimulations(5000, '0000000000000000000')
     print("GAMES BY NEW NETWORK")
     x.trainingGame(5000, True)
