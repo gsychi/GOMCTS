@@ -397,9 +397,10 @@ class MonteCarlo():
     def nnMove(position,nn):
         #pos=list(map(int, (position)))
         input=np.reshape(position,(1,19))
+
         print(nn)
         output=nn.predict(input)
-        return int(np.argmax(output, axis=1))
+        return output
 
     def playEachOther(x, y):
         end=2
@@ -410,7 +411,7 @@ class MonteCarlo():
         posArray=np.array([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0])
         while end==2:
             if(posArray[18]==0):
-                move=MonteCarlo.nnMove(posArray,x)
+                move=MonteCarlo.nnMove(posArray,x)*board.legalMove()
                 posArray[move+posArray[18]*9]=1
                 posArray[18]=1
                 board.state=TTTEnvironment.stringToState(board,''.join(str(x) for x in posArray))
@@ -468,5 +469,6 @@ for i in range(3000):
     x.neuralNetwork = brain
     x.updateEvals()
 
+    x.runSimulations(5000, '0000000000000000000')
     print("GAMES BY NEW NETWORK")
     x.trainingGame(5000, True)
