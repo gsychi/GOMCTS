@@ -1,6 +1,7 @@
 import numpy as np
 from TTTEnvironment import TTTEnvironment
 from ourNN import NeuralNetwork
+import copy
 
 # w stands for # of wins, n stands for number of times node has been visited.
 # N stands for number of times parent node is visited, and c is just an exploration constant that can be tuned.
@@ -322,8 +323,7 @@ class MonteCarlo():
 
             seriousGame.updateState()
             if printLog == True:
-                print(seriousGame.Xstate)
-                print(seriousGame.Ostate)
+                self.printBoard(seriousGame.Xstate, seriousGame.Ostate)
                 print("-------")
 
         if printLog == True:
@@ -383,20 +383,81 @@ class MonteCarlo():
         outputs = np.divide(outputWin, outputSeen, out=np.zeros_like(outputWin), where=outputSeen != 0)
         return inputs, outputs
 
+    def printBoard(self, a, b):
+        for i in range(3):
+            for j in range(3):
+                if (a[i][j]==1):
+                    print("X", ' ', end='')
+                elif (b[i][j] == 1):
+                     print("O", ' ', end='')
+                else:
+                    print("+", " ", end='')
+            print(" ")
+
+    def nnMove(position,nn):
+        #pos=list(map(int, (position)))
+        input=np.reshape(position,(1,19))
+        print(nn)
+        output=nn.predict(input)
+        return int(np.argmax(output, axis=1))
+
+    def playEachOther(x, y):
+        end=2
+        board=TTTEnvironment()
+        board.state=TTTEnvironment.stringToState(board,'0000000000000000000')
+        TTTEnvironment.setValues(board)
+
+        posArray=np.array([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0])
+        while end==2:
+            if(posArray[18]==0):
+                move=MonteCarlo.nnMove(posArray,x)
+                posArray[move+posArray[18]*9]=1
+                posArray[18]=1
+                board.state=TTTEnvironment.stringToState(board,''.join(str(x) for x in posArray))
+                board.setValues()
+                end=board.check_Win()
+                if end!=2 :
+                    return end
+            else:
+                move = MonteCarlo.nnMove(posArray,y)
+                posArray[move + posArray[18] * 9] = 1
+                posArray[18] = 0
+                board.state = board.stringToState("".join(str(posArray[c]) for c in range(len(posArray))))
+                board.setValues()
+                end = board.check_Win()
+                if end != 2:
+                    return end
+        return end
+
+    def testEachOther(x, y, trials):
+        xScore=0
+        for m in range(trials):
+            xScore+=MonteCarlo.playEachOther(x,y)
+            xScore-=MonteCarlo.playEachOther(y,x)
+        if xScore>=0:
+            return x
+        else:
+            return y
 
 #TESTING THE SELF-LEARNING PROCESS
 
 brain = NeuralNetwork(np.zeros((1, 19)), np.zeros((1, 9)), 50)
 x = MonteCarlo(brain)
+print("GAMES BY INITIAL NET")
+x.trainingGame(12000, True)
 
 for i in range(3000):
     print("GENERATION " + str(i+1))
     #450 games, 25 playouts for each move
-    inputs, outputs = x.createDatabaseForNN(220, 25)
-    brain = NeuralNetwork(inputs, outputs, 80)
+    inputs, outputs = x.createDatabaseForNN(200, 25)
+    previousBrain=copy.deepcopy(brain)
+    brain = NeuralNetwork(inputs, outputs, 30)
     print(len(inputs))
+    print("Testing new MCTS...")
     print("Training Network with previous data...")
     brain.trainNetwork(30000, 0.001)
+    print("Comparing New Neural Net...")
+    brain=MonteCarlo.testEachOther(brain,previousBrain,5)
     print("Self-learning is complete.")
     correct = (np.argmax(brain.predict(inputs), axis=1) == np.argmax(outputs, axis=1)).sum()
     print("Accuracy: ", correct/len(inputs))
