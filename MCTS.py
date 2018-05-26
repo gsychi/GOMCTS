@@ -411,7 +411,7 @@ class MonteCarlo():
         posArray=np.array([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0])
         while end==2:
             if(posArray[18]==0):
-                move=MonteCarlo.nnMove(posArray,x)*board.legalMove()
+                move= int(np.argmax(MonteCarlo.nnMove(posArray,x)*board.legalMove()))
                 posArray[move+posArray[18]*9]=1
                 posArray[18]=1
                 board.state=TTTEnvironment.stringToState(board,''.join(str(x) for x in posArray))
