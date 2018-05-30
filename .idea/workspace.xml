@@ -4,6 +4,20 @@
     <list default="true" id="02f5fc88-ce52-42a5-8bdb-e8054efa7383" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change beforePath="$PROJECT_DIR$/MCTS.py" afterPath="$PROJECT_DIR$/MCTS.py" />
+      <change beforePath="$PROJECT_DIR$/bias_1.npy" afterPath="$PROJECT_DIR$/bias_1.npy" />
+      <change beforePath="$PROJECT_DIR$/bias_2.npy" afterPath="$PROJECT_DIR$/bias_2.npy" />
+      <change beforePath="$PROJECT_DIR$/bias_3.npy" afterPath="$PROJECT_DIR$/bias_3.npy" />
+      <change beforePath="$PROJECT_DIR$/bias_4.npy" afterPath="$PROJECT_DIR$/bias_4.npy" />
+      <change beforePath="$PROJECT_DIR$/bias_5.npy" afterPath="$PROJECT_DIR$/bias_5.npy" />
+      <change beforePath="$PROJECT_DIR$/childrenNNEvaluation.npy" afterPath="$PROJECT_DIR$/childrenNNEvaluation.npy" />
+      <change beforePath="$PROJECT_DIR$/childrenStateSeen.npy" afterPath="$PROJECT_DIR$/childrenStateSeen.npy" />
+      <change beforePath="$PROJECT_DIR$/childrenStateWin.npy" afterPath="$PROJECT_DIR$/childrenStateWin.npy" />
+      <change beforePath="$PROJECT_DIR$/dictionary.npy" afterPath="$PROJECT_DIR$/dictionary.npy" />
+      <change beforePath="$PROJECT_DIR$/weight_1.npy" afterPath="$PROJECT_DIR$/weight_1.npy" />
+      <change beforePath="$PROJECT_DIR$/weight_2.npy" afterPath="$PROJECT_DIR$/weight_2.npy" />
+      <change beforePath="$PROJECT_DIR$/weight_3.npy" afterPath="$PROJECT_DIR$/weight_3.npy" />
+      <change beforePath="$PROJECT_DIR$/weight_4.npy" afterPath="$PROJECT_DIR$/weight_4.npy" />
+      <change beforePath="$PROJECT_DIR$/weight_5.npy" afterPath="$PROJECT_DIR$/weight_5.npy" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -40,7 +54,7 @@
         <entry file="file://$PROJECT_DIR$/MCTS.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="173">
-              <caret line="566" column="40" lean-forward="true" selection-start-line="566" selection-start-column="40" selection-end-line="566" selection-end-column="40" />
+              <caret line="561" column="17" lean-forward="true" selection-start-line="561" selection-start-column="17" selection-end-line="561" selection-end-column="17" />
               <folding />
             </state>
           </provider>
@@ -698,7 +712,7 @@
     <entry file="file://$PROJECT_DIR$/MCTS.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="173">
-          <caret line="566" column="40" lean-forward="true" selection-start-line="566" selection-start-column="40" selection-end-line="566" selection-end-column="40" />
+          <caret line="561" column="17" lean-forward="true" selection-start-line="561" selection-start-column="17" selection-end-line="561" selection-end-column="17" />
           <folding />
         </state>
       </provider>

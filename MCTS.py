@@ -491,7 +491,7 @@ class MonteCarlo():
             print("New network was of equal strength or stronger, obtained a score of +", xScore)
             return x
         else:
-            print("New network was weaker, obtained a score of +", xScore)
+            print("New network was weaker, obtained a score of ", xScore)
             return y
 
     def storeMCTSandNN(self):
@@ -556,8 +556,11 @@ class MonteCarlo():
 brain = NeuralNetwork(np.zeros((1, 19)), np.zeros((1, 9)), 50)
 #x = MonteCarlo(brain)
 x = MonteCarlo(True)
+print("GAMES BY RANDOM NET")
+x.trainingGame(5000, True)
+
 x.loadMCTSandNN()
-print("GAMES BY INITIAL NET")
+print("GAMES BY TRAINED NET")
 x.trainingGame(5000, True)
 
 for i in range(3000):
