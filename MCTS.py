@@ -535,12 +535,12 @@ class MonteCarlo():
         if os.path.exists("weight_5.npy"):
             loadBrain.weight_5 = np.load("weight_5.npy")
 
-        self.dictionary=np.load("dictionary.npy").item()
-        self.childrenStateSeen=np.load("childrenStateSeen.npy")
-        self.childrenStateWin=np.load("childrenStateWin.npy")
-        self.childrenNNEvaluation=np.load("childrenNNEvaluation.npy")
+        self.dictionary = np.load("dictionary.npy").item()
+        self.childrenStateSeen = np.load("childrenStateSeen.npy")
+        self.childrenStateWin = np.load("childrenStateWin.npy")
+        self.childrenNNEvaluation = np.load("childrenNNEvaluation.npy")
 
-        self.neuralNetwork=loadBrain
+        self.neuralNetwork = loadBrain
 
 
 
@@ -556,6 +556,7 @@ class MonteCarlo():
 brain = NeuralNetwork(np.zeros((1, 19)), np.zeros((1, 9)), 50)
 #x = MonteCarlo(brain)
 x = MonteCarlo(True)
+x.loadMCTSandNN()
 print("GAMES BY INITIAL NET")
 x.trainingGame(5000, True)
 
@@ -568,7 +569,7 @@ for i in range(3000):
     print(len(inputs))
     print("Testing new MCTS...")
     print("Training Network with previous data...")
-    brain.trainNetwork(800, 0.003)
+    brain.trainNetwork(800, 0.008)
     print("Comparing New Neural Net...")
     brain = MonteCarlo.testEachOther(brain, previousBrain, 9)
     print("Self-learning is complete.")
@@ -576,8 +577,8 @@ for i in range(3000):
     print("Accuracy: ", correct/len(inputs))
     print("Total datasets: ", len(inputs))
     #Update the network onto MCTS
-    print("Printing Move Choices")
-    x.printPredictions()
+    #print("Printing Move Choices")
+    #x.printPredictions()
     x.storeMCTSandNN()
     x.neuralNetwork = brain
     x.updateEvals()
