@@ -2,15 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="02f5fc88-ce52-42a5-8bdb-e8054efa7383" name="Default" comment="">
-      <change beforePath="" afterPath="$PROJECT_DIR$/trainingGame2.sgf" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/trainingGame3.sgf" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/trainingGame4.sgf" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/trainingGame5.sgf" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/trainingGame6.sgf" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/trainingGame7.sgf" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/trainingGame8.sgf" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/trainingGame9.sgf" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/trainingGame11.sgf" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change beforePath="$PROJECT_DIR$/GoEnvironment.py" afterPath="$PROJECT_DIR$/GoEnvironment.py" />
       <change beforePath="$PROJECT_DIR$/SGFConverter.py" afterPath="$PROJECT_DIR$/SGFConverter.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -22,33 +16,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="ANN.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ANN.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="17" column="0" lean-forward="false" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="CNN.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/CNN.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="231">
-              <caret line="11" column="16" lean-forward="false" selection-start-line="11" selection-start-column="16" selection-end-line="11" selection-end-column="16" />
-              <folding>
-                <element signature="e#0#64#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="MCTS.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/MCTS.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="259">
-              <caret line="505" column="42" lean-forward="true" selection-start-line="503" selection-start-column="4" selection-end-line="505" selection-end-column="42" />
+            <state relative-caret-position="-14">
+              <caret line="492" column="41" lean-forward="true" selection-start-line="492" selection-start-column="41" selection-end-line="492" selection-end-column="41" />
               <folding>
                 <element signature="e#10730#11074#0" expanded="false" />
                 <element signature="e#11139#14395#0" expanded="false" />
@@ -60,12 +32,24 @@
       <file leaf-file-name="SGFConverter.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/SGFConverter.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="246">
-              <caret line="130" column="26" lean-forward="false" selection-start-line="130" selection-start-column="26" selection-end-line="130" selection-end-column="26" />
+            <state relative-caret-position="172">
+              <caret line="141" column="26" lean-forward="false" selection-start-line="141" selection-start-column="26" selection-end-line="141" selection-end-column="26" />
               <folding>
                 <element signature="e#91#130#0" expanded="true" />
-                <element signature="e#866#2388#0" expanded="false" />
+                <element signature="e#687#1121#0" expanded="false" />
+                <element signature="e#1157#2574#0" expanded="false" />
+                <element signature="e#2678#3919#0" expanded="false" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ourNN.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ourNN.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="150">
+              <caret line="18" column="30" lean-forward="false" selection-start-line="18" selection-start-column="30" selection-end-line="18" selection-end-column="30" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -73,8 +57,8 @@
       <file leaf-file-name="GoEnvironment.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/GoEnvironment.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="139">
-              <caret line="395" column="34" lean-forward="true" selection-start-line="395" selection-start-column="34" selection-end-line="395" selection-end-column="34" />
+            <state relative-caret-position="96">
+              <caret line="60" column="0" lean-forward="false" selection-start-line="60" selection-start-column="0" selection-end-line="60" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -91,8 +75,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>self</find>
-      <find>PUCT</find>
       <find>print</find>
       <find>makemove</find>
       <find>makeMove</find>
@@ -118,15 +100,19 @@
       <find>update</find>
       <find>82</find>
       <find>legalMove</find>
-      <find>boardToState</find>
       <find>returnAllmoves</find>
       <find>outputs</find>
+      <find>boardToState</find>
+      <find>self.alphabet.split(&quot;&quot;)</find>
+      <find>woutputs</find>
     </findStrings>
     <replaceStrings>
       <replace>self.state</replace>
       <replace>x</replace>
       <replace>self.bias_2</replace>
       <replace>outStuff</replace>
+      <replace>list(self.alphabet)</replace>
+      <replace>wOutputs</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -353,7 +339,7 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.48745045" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.4583884" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -377,21 +363,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$USER_HOME$/Dropbox/문서/Exeter Senior Year/CompSci/Ex_Files_Machine_Learning_EssT_ValueEstimate/Exercise Files/venv/lib/python3.6/site-packages/numpy/lib/arraysetops.py" />
-    <entry file="file://$PROJECT_DIR$/GoEnvironment.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5985">
-          <caret line="399" column="23" lean-forward="false" selection-start-line="399" selection-start-column="23" selection-end-line="399" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ourNN.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="63">
-          <caret line="67" column="0" lean-forward="false" selection-start-line="67" selection-start-column="0" selection-end-line="74" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/test.py" />
     <entry file="file://$PROJECT_DIR$/PytorchNN.py" />
     <entry file="file://$PROJECT_DIR$/MCTS.py">
@@ -692,13 +663,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ourNN.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="819">
-          <caret line="43" column="51" lean-forward="false" selection-start-line="43" selection-start-column="51" selection-end-line="43" selection-end-column="51" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/TTTEnvironment.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="125">
@@ -725,18 +689,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/GoEnvironment.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="139">
-          <caret line="395" column="34" lean-forward="true" selection-start-line="395" selection-start-column="34" selection-end-line="395" selection-end-column="34" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/MCTS.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="259">
-          <caret line="505" column="42" lean-forward="true" selection-start-line="503" selection-start-column="4" selection-end-line="505" selection-end-column="42" />
+        <state relative-caret-position="-14">
+          <caret line="492" column="41" lean-forward="true" selection-start-line="492" selection-start-column="41" selection-end-line="492" selection-end-column="41" />
           <folding>
             <element signature="e#10730#11074#0" expanded="false" />
             <element signature="e#11139#14395#0" expanded="false" />
@@ -744,13 +700,55 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/GoEnvironment.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="96">
+          <caret line="60" column="0" lean-forward="false" selection-start-line="60" selection-start-column="0" selection-end-line="60" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/12971480-035-lamma8888-martin3141.sgf">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ourNN.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="18" column="30" lean-forward="false" selection-start-line="18" selection-start-column="30" selection-end-line="18" selection-end-column="30" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/trainingGame10.sgf">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-581">
+          <caret line="11" column="5" lean-forward="true" selection-start-line="11" selection-start-column="5" selection-end-line="11" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/trainingGame11.sgf">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/SGFConverter.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="246">
-          <caret line="130" column="26" lean-forward="false" selection-start-line="130" selection-start-column="26" selection-end-line="130" selection-end-column="26" />
+        <state relative-caret-position="172">
+          <caret line="141" column="26" lean-forward="false" selection-start-line="141" selection-start-column="26" selection-end-line="141" selection-end-column="26" />
           <folding>
             <element signature="e#91#130#0" expanded="true" />
-            <element signature="e#866#2388#0" expanded="false" />
+            <element signature="e#687#1121#0" expanded="false" />
+            <element signature="e#1157#2574#0" expanded="false" />
+            <element signature="e#2678#3919#0" expanded="false" />
           </folding>
         </state>
       </provider>

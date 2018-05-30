@@ -2,6 +2,18 @@
 from GoEnvironment import GoEnvironment
 from ourNN import NeuralNetwork
 import numpy as np
+from tempfile import TemporaryFile
+
+weights1 = TemporaryFile()
+weights2 = TemporaryFile()
+weights3 = TemporaryFile()
+weights4 = TemporaryFile()
+weights5 = TemporaryFile()
+bias1 = TemporaryFile()
+bias2 = TemporaryFile()
+bias3 = TemporaryFile()
+bias4 = TemporaryFile()
+bias5 = TemporaryFile()
 
 def findCoordinate(blah):
     sgfCoordinates = list("abcdefghi")
@@ -34,7 +46,6 @@ def scrapeGame(game, result):
 
     #moves are downloaded
     a = returnAllMoves(game)
-    aResult = result #white won this game.
     print(a)
 
     statesExplored = np.zeros((1, 163))  # Store it as an array of directories for the seen stuff
@@ -48,28 +59,28 @@ def scrapeGame(game, result):
         #before move is made
         if go.turns%2 == 0:
             go.customMove(a[i], "B")
-            if result == 1:
-                action = np.zeros((1, 82))
-                action[0][go.directory(a[i])] = 1
-                if go.turns == 0:
-                    statesExplored = state
-                    statesWin = action
-                else:
-                    statesExplored = np.concatenate((statesExplored, state), axis=0)
-                    statesWin = np.concatenate((statesWin, action), axis=0)
+            #if result == 1:
+            action = np.zeros((1, 82))
+            action[0][go.directory(a[i])] = 1
+            if go.turns == 0:
+                statesExplored = state
+                statesWin = action
+            else:
+                statesExplored = np.concatenate((statesExplored, state), axis=0)
+                statesWin = np.concatenate((statesWin, action), axis=0)
 
 
         else:
             go.customMove(a[i], "W")
-            if result == -1:
-                action = np.zeros((1, 82))
-                action[0][go.directory(a[i])] = 1
-                if go.turns == 1:
-                    statesExplored = state
-                    statesWin = action
-                else:
-                    statesExplored = np.concatenate((statesExplored, state), axis=0)
-                    statesWin = np.concatenate((statesWin, action), axis=0)
+            #if result == -1:
+            action = np.zeros((1, 82))
+            action[0][go.directory(a[i])] = 1
+            if go.turns == 1:
+                statesExplored = state
+                statesWin = action
+            else:
+                statesExplored = np.concatenate((statesExplored, state), axis=0)
+                statesWin = np.concatenate((statesWin, action), axis=0)
 
         #update the board
         go.updateBoard()
@@ -80,9 +91,10 @@ def scrapeGame(game, result):
 
     return statesExplored, statesWin
 
-def createDatabase(games, results):
-    inputs = np.zeros((1, 163))
-    outputs = np.zeros((1, 82))
+def createDatabase(games, results, alreadyIn = np.zeros((1,163)), alreadyOut = np.zeros((1,82))):
+    inputs = alreadyIn
+    outputs = alreadyOut
+
     for i in range(len(games)):
         newInputs, newOutputs = scrapeGame(games[i],results[i])
         if i == 0:
@@ -111,8 +123,10 @@ def createDatabase(games, results):
 
     return inputs, outputs
 
-games = ["trainingGame1.sgf","trainingGame2.sgf","trainingGame3.sgf","trainingGame4.sgf","trainingGame5.sgf","trainingGame6.sgf", "trainingGame7.sgf", "trainingGame8.sgf", "trainingGame9.sgf"]
-results = [-1, -1, -1, -1, -1, -1, -1, 1, -1]
+
+
+games = ["trainingGame1.sgf","trainingGame2.sgf","trainingGame3.sgf","trainingGame4.sgf","trainingGame5.sgf","trainingGame6.sgf", "trainingGame7.sgf", "trainingGame8.sgf", "trainingGame9.sgf", "trainingGame10.sgf", "trainingGame11.sgf"]
+results = [-1, -1, -1, -1, -1, -1, -1, 1, -1, 1, 1]
 
 inputs, outputs = createDatabase(games, results)
 print(inputs.shape)
@@ -120,12 +134,37 @@ print(inputs.shape)
 #print(outputs.shape)
 #print(np.sum(outputs, axis=1))
 
+
+brain = NeuralNetwork(inputs, outputs, 50)
+#load nn information so it can start from the same place for training
+brain.weight_1 = np.load(weights1)
+brain.weight_2 = np.load(weights2)
+brain.weight_3 = np.load(weights3)
+brain.weight_4 = np.load(weights4)
+brain.weight_5 = np.load(weights5)
+brain.bias_1 = np.load(bias1)
+brain.bias_2 = np.load(bias2)
+brain.bias_3 = np.load(bias3)
+brain.bias_4 = np.load(bias4)
+brain.bias_5 = np.load(bias5)
+
 print("Start training...")
-brain = NeuralNetwork(inputs, outputs, 90)
-for i in range(100):
+for i in range(200):
     print("Epoch ", str(i+1))
-    brain.trainNetwork(200, 0.003)
+    brain.trainNetwork(200, 0.005)
     correct = (np.argmax(brain.predict(inputs), axis=1) == np.argmax(outputs, axis=1)).sum()
     print("Accuracy: ", correct/len(inputs))
     print("Total datasets: ", len(inputs))
 print("--FINISH TRAINING--")
+
+#save nn information
+np.save(brain.weight_1, weights1)
+np.save(brain.weight_2, weights2)
+np.save(brain.weight_3, weights3)
+np.save(brain.weight_4, weights4)
+np.save(brain.weight_5, weights5)
+np.save(brain.bias_1, bias1)
+np.save(brain.bias_2, bias2)
+np.save(brain.bias_3, bias3)
+np.save(brain.bias_4, bias4)
+np.save(brain.bias_5, bias5)

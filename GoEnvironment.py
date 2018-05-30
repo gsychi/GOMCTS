@@ -44,29 +44,29 @@ class GoEnvironment():
 
     def flipAction180(self, move):
         directory = self.alphabet.index(move[:1])
-        return self.alphabet.split("")[8-directory]+(10-int(move[1:]))
+        return list(self.alphabet)[8-directory]+(10-int(move[1:]))
 
     def flipAction90CC(self, move):
         column = self.alphabet.index(move[:1])-5
         row = int(move[1:])-5
         newCol = -row+5
         newRow = column+5
-        return self.alphabet.split("")[newCol-1]+(newRow+1)
+        return list(self.alphabet)[newCol-1]+(newRow+1)
 
     def flipAction90C(self,move):
         column = self.alphabet.index(move[:1]) - 5
         row = int(move[1:]) - 5
         newCol = row + 5
         newRow = -column + 5
-        return self.alphabet.split("")[newCol - 1] + (newRow - 1)
+        return list(self.alphabet)[newCol - 1] + (newRow - 1)
 
     def mirrorY(self, move):
         directory = self.alphabet.index(move[:1])
-        return self.alphabet.split("")[8-directory]+move[1:]
+        return list(self.alphabet)[8-directory]+move[1:]
 
     def mirrorX(self, move):
         directory = self.alphabet.index(move[:1])
-        return self.alphabet.split("")[directory] + (20 - int(move[1:]))
+        return list(self.alphabet)[directory] + (20 - int(move[1:]))
 
     def printBoard(self):
         print('CURRENT STATE:\n\n   A  B  C  D  E  F  G  H  J')
