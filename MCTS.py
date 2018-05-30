@@ -2,6 +2,7 @@ import numpy as np
 from TTTEnvironment import TTTEnvironment
 from ourNN import NeuralNetwork
 import copy
+import os.path
 
 # w stands for # of wins, n stands for number of times node has been visited.
 # N stands for number of times parent node is visited, and c is just an exploration constant that can be tuned.
@@ -61,6 +62,18 @@ class MonteCarlo():
         self.childrenNNEvaluation = np.zeros((1, 9))  # This is a 2D array
         self.childrenNNEvaluation[0] = a.predict(beginState)
         self.neuralNetwork = a
+
+    def __init__(self, load=True):
+        beginState = np.array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+        self.dictionary = {
+            '0000000000000000000': 0  # empty board corresponds to position 0 on numpy arrays
+        }
+        # self.gameStateSeen = np.zeros(9) Commented because it seems obsolete
+
+        self.childrenStateSeen = np.zeros((1, 9))  # This is a 2D array
+        self.childrenStateWin = np.zeros((1, 9))  # This is a 2D array
+        self.childrenNNEvaluation = np.zeros((1, 9))  # This is a 2D array
+        self.neuralNetwork = NeuralNetwork(np.zeros((1, 19)), np.zeros((1, 9)), 50)
 
     def addToDictionary(self, position):
         self.dictionary[position]=len(self.dictionary)
@@ -207,7 +220,7 @@ class MonteCarlo():
         temp = TTTEnvironment()
         temp.state = TTTEnvironment.stringToState(temp, position)
         temp.setValues()
-        noiseConstant = 0.14/(2.4*(1+np.sum(temp.Xstate.flatten())))
+        noiseConstant = 0.1/(4*(1+np.sum(temp.Xstate.flatten())))
         if noise==True:
             noise = np.random.rand(1, 9)*noiseConstant*2-noiseConstant
             moveChoice = moveChoice + noise
@@ -436,7 +449,7 @@ class MonteCarlo():
         print(board.state)
         return end
 
-    def playEachOther(x, y, startMove):
+    def playEachOther(a, b, startMove):
         end=2
         board=TTTEnvironment()
         board.state=TTTEnvironment.stringToState(board,'0000000000000000000')
@@ -446,7 +459,7 @@ class MonteCarlo():
         posArray[startMove]=1
         while end==2:
             if(posArray[18]==0):
-                move=MonteCarlo.nnMove(posArray,x)
+                move=MonteCarlo.nnMove(posArray,a)
                 posArray[move+posArray[18]*9]=1
                 posArray[18]=1
                 board.state=TTTEnvironment.stringToState(board,"".join(str(posArray[c]) for c in range(len(posArray))))
@@ -456,7 +469,7 @@ class MonteCarlo():
                     print(board.state)
                     return end
             else:
-                move = MonteCarlo.nnMove(posArray,y)
+                move = MonteCarlo.nnMove(posArray,b)
                 posArray[move + posArray[18] * 9] = 1
                 posArray[18] = 0
                 board.state = board.stringToState("".join(str(posArray[c]) for c in range(len(posArray))))
@@ -474,17 +487,75 @@ class MonteCarlo():
             xScore -= MonteCarlo.playEachOther(y,x,m%9)
         xScore += 3*MonteCarlo.playEachOtherStart(x,y)
         xScore -= 3*MonteCarlo.playEachOtherStart(y,x)
-        if xScore > 0:
-            print("New network was stronger, obtained a score of +", xScore)
+        if xScore >= 0:
+            print("New network was of equal strength or stronger, obtained a score of +", xScore)
             return x
         else:
-            print("New network was of equal strength or weaker, obtained a score of +", xScore)
+            print("New network was weaker, obtained a score of +", xScore)
             return y
+
+    def storeMCTSandNN(self):
+        np.save("weight_1.npy", self.neuralNetwork.weight_1)
+        np.save("weight_2.npy", self.neuralNetwork.weight_2)
+        np.save("weight_3.npy", self.neuralNetwork.weight_3)
+        np.save("weight_4.npy", self.neuralNetwork.weight_4)
+        np.save("weight_5.npy", self.neuralNetwork.weight_5)
+        np.save("bias_1.npy", self.neuralNetwork.bias_1)
+        np.save("bias_2.npy", self.neuralNetwork.bias_2)
+        np.save("bias_3.npy", self.neuralNetwork.bias_3)
+        np.save("bias_4.npy", self.neuralNetwork.bias_4)
+        np.save("bias_5.npy", self.neuralNetwork.bias_5)
+
+        np.save("dictionary.npy", self.dictionary)
+        np.save("childrenStateSeen.npy", self.childrenStateSeen)
+        np.save("childrenStateWin.npy", self.childrenStateWin)
+        np.save("childrenNNEvaluation.npy", self.childrenNNEvaluation)
+
+    def loadMCTSandNN(self):
+        loadBrain=NeuralNetwork(np.zeros((1,19)),np.zeros((1,9)), 50)
+        if os.path.exists("bias_1.npy"):
+            loadBrain.bias_1 = np.load("bias_1.npy")
+        if os.path.exists("bias_2.npy"):
+            loadBrain.bias_2 = np.load("bias_2.npy")
+        if os.path.exists("bias_3.npy"):
+            loadBrain.bias_3 = np.load("bias_3.npy")
+        if os.path.exists("bias_4.npy"):
+            loadBrain.bias_4 = np.load("bias_4.npy")
+        if os.path.exists("bias_5.npy"):
+            loadBrain.bias_5 = np.load("bias_5.npy")
+
+        if os.path.exists("weight_1.npy"):
+            loadBrain.weight_1 = np.load("weight_1.npy")
+        if os.path.exists("weight_2.npy"):
+            loadBrain.weight_2 = np.load("weight_2.npy")
+        if os.path.exists("weight_3.npy"):
+            loadBrain.weight_3 = np.load("weight_3.npy")
+        if os.path.exists("weight_4.npy"):
+            loadBrain.weight_4 = np.load("weight_4.npy")
+        if os.path.exists("weight_5.npy"):
+            loadBrain.weight_5 = np.load("weight_5.npy")
+
+        self.dictionary=np.load("dictionary.npy").item()
+        self.childrenStateSeen=np.load("childrenStateSeen.npy")
+        self.childrenStateWin=np.load("childrenStateWin.npy")
+        self.childrenNNEvaluation=np.load("childrenNNEvaluation.npy")
+
+        self.neuralNetwork=loadBrain
+
+
+
+    def printPredictions(self):
+        temporaryBoard=TTTEnvironment()
+        for pos in self.dictionary:
+            temporaryBoard.state=temporaryBoard.stringToState(pos)
+            temporaryBoard.setValues()
+            print(pos,": ", self.chooseMove(pos,temporaryBoard.legalMove(),2**0.5,False))
 
 #TESTING THE SELF-LEARNING PROCESS
 
 brain = NeuralNetwork(np.zeros((1, 19)), np.zeros((1, 9)), 50)
-x = MonteCarlo(brain)
+#x = MonteCarlo(brain)
+x = MonteCarlo(True)
 print("GAMES BY INITIAL NET")
 x.trainingGame(5000, True)
 
@@ -497,7 +568,7 @@ for i in range(3000):
     print(len(inputs))
     print("Testing new MCTS...")
     print("Training Network with previous data...")
-    brain.trainNetwork(25000, 0.003)
+    brain.trainNetwork(800, 0.003)
     print("Comparing New Neural Net...")
     brain = MonteCarlo.testEachOther(brain, previousBrain, 9)
     print("Self-learning is complete.")
@@ -505,6 +576,9 @@ for i in range(3000):
     print("Accuracy: ", correct/len(inputs))
     print("Total datasets: ", len(inputs))
     #Update the network onto MCTS
+    print("Printing Move Choices")
+    x.printPredictions()
+    x.storeMCTSandNN()
     x.neuralNetwork = brain
     x.updateEvals()
 
