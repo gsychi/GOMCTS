@@ -1,5 +1,6 @@
 #This is a SGF Converter. It reads a sgf file and returns the list of moves that happened.
 from GoEnvironment import GoEnvironment
+from ourNN import NeuralNetwork
 import numpy as np
 
 def findCoordinate(blah):
@@ -104,11 +105,27 @@ def createDatabase(games, results):
             inputs = np.concatenate((inputs, newInputs), axis=0)
             outputs = np.concatenate((outputs, newOutputs), axis=0)
 
+    #do something specific for the output.
+    for i in range(len(outputs)):
+        outputs[i] = outputs[i]/np.sum(outputs[i])
+
     return inputs, outputs
 
-games = ["trainingGame1.sgf"]
-results = [-1]
+games = ["trainingGame1.sgf","trainingGame2.sgf","trainingGame3.sgf","trainingGame4.sgf","trainingGame5.sgf","trainingGame6.sgf", "trainingGame7.sgf", "trainingGame8.sgf", "trainingGame9.sgf"]
+results = [-1, -1, -1, -1, -1, -1, -1, 1, -1]
 
-inStuff, outStuff = createDatabase(games, results)
-print(inStuff.shape)
-print(outStuff.shape)
+inputs, outputs = createDatabase(games, results)
+print(inputs.shape)
+
+#print(outputs.shape)
+#print(np.sum(outputs, axis=1))
+
+print("Start training...")
+brain = NeuralNetwork(inputs, outputs, 90)
+for i in range(100):
+    print("Epoch ", str(i+1))
+    brain.trainNetwork(200, 0.003)
+    correct = (np.argmax(brain.predict(inputs), axis=1) == np.argmax(outputs, axis=1)).sum()
+    print("Accuracy: ", correct/len(inputs))
+    print("Total datasets: ", len(inputs))
+print("--FINISH TRAINING--")
