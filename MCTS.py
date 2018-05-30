@@ -63,7 +63,7 @@ class MonteCarlo():
         self.childrenNNEvaluation[0] = a.predict(beginState)
         self.neuralNetwork = a
 
-    def __init__(self, load=True):
+    def __init__(self, load=True): #USES STORED DATA
         beginState = np.array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
         self.dictionary = {
             '0000000000000000000': 0  # empty board corresponds to position 0 on numpy arrays
@@ -74,6 +74,8 @@ class MonteCarlo():
         self.childrenStateWin = np.zeros((1, 9))  # This is a 2D array
         self.childrenNNEvaluation = np.zeros((1, 9))  # This is a 2D array
         self.neuralNetwork = NeuralNetwork(np.zeros((1, 19)), np.zeros((1, 9)), 50)
+
+        self.loadMCTSandNN()
 
     def addToDictionary(self, position):
         self.dictionary[position]=len(self.dictionary)
