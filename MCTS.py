@@ -1,6 +1,7 @@
 import numpy as np
 from TTTEnvironment import TTTEnvironment
-from ourNN import NeuralNetwork
+from PytorchNN import PytorchNN
+import torch
 
 # w stands for # of wins, n stands for number of times node has been visited.
 # N stands for number of times parent node is visited, and c is just an exploration constant that can be tuned.
@@ -53,13 +54,12 @@ class MonteCarlo():
         self.dictionary = {
             '0000000000000000000': 0  # empty board corresponds to position 0 on numpy arrays
         }
-        #self.gameStateSeen = np.zeros(9) Commented because it seems obsolete
 
         self.childrenStateSeen = np.zeros((1, 9))  # This is a 2D array
         self.childrenStateWin = np.zeros((1, 9))  # This is a 2D array
         self.childrenNNEvaluation = np.zeros((1, 9))  # This is a 2D array
         self.childrenNNEvaluation[0] = a.predict(beginState)
-        self.neuralNetwork = a
+        self.PytorchNN = a
 
     def addToDictionary(self, position):
         self.dictionary[position]=len(self.dictionary)
@@ -221,7 +221,7 @@ class MonteCarlo():
         board = TTTEnvironment()
         board.state = TTTEnvironment.stringToState(board, pos)
         board.setValues()
-        winPercentages = self.neuralNetwork.predict(board.stateToArray())
+        winPercentages = self.PytorchNN.predict(board.stateToArray())
         self.childrenNNEvaluation = np.concatenate((self.childrenNNEvaluation, winPercentages), axis=0)
 
     def updateEvals(self):
@@ -234,7 +234,7 @@ class MonteCarlo():
         self.childrenStateSeen = np.zeros((1, 9))  # This is a 2D array
         self.childrenStateWin = np.zeros((1, 9))  # This is a 2D array
         self.childrenNNEvaluation = np.zeros((1, 9))  # This is a 2D array
-        self.childrenNNEvaluation[0] = self.neuralNetwork.predict(beginState)
+        self.childrenNNEvaluation[0] = self.PytorchNN.predict(beginState)
 
 
     def intToPos(self, integ):
@@ -395,7 +395,7 @@ class MonteCarlo():
 
 #TESTING THE SELF-LEARNING PROCESS
 
-brain = NeuralNetwork(np.zeros((1, 19)), np.zeros((1, 9)), 50)
+brain = PytorchNN(np.zeros((1, 19)), np.zeros((1, 9)))
 x = MonteCarlo(brain)
 print("GAMES BY INITIAL NET")
 x.trainingGame(5000, True)
@@ -404,16 +404,16 @@ for i in range(3000):
     print("GENERATION " + str(i+1))
     #450 games, 25 playouts for each move
     inputs, outputs = x.createDatabaseForNN(800, 25)
-    brain = NeuralNetwork(inputs, outputs, 30)
+    brain = PytorchNN(inputs, outputs)
     print(len(inputs))
     print("Training Network with previous data...")
-    brain.trainNetwork(15000, 0.005)
+    brain.train()
     print("Self-learning is complete.")
     correct = (np.argmax(brain.predict(inputs), axis=1) == np.argmax(outputs, axis=1)).sum()
     print("Accuracy: ", correct/len(inputs))
     print("Total datasets: ", len(inputs))
     #Update the network onto MCTS
-    x.neuralNetwork = brain
+    x.PytorchNN = brain
     x.updateEvals()
 
     x.runSimulations(5000, '0000000000000000000')
