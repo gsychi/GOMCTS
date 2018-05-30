@@ -406,7 +406,7 @@ class MonteCarlo():
         legalOutput=np.multiply(output,tempBoard.legalMove())
         return int(np.argmax(legalOutput, axis=1))
 
-    def playEachOther(x, y):
+    def playEachOtherStart(x, y):
         end=2
         board=TTTEnvironment()
         board.state=TTTEnvironment.stringToState(board,'0000000000000000000')
@@ -436,11 +436,44 @@ class MonteCarlo():
         print(board.state)
         return end
 
+    def playEachOther(x, y, startMove):
+        end=2
+        board=TTTEnvironment()
+        board.state=TTTEnvironment.stringToState(board,'0000000000000000000')
+        TTTEnvironment.setValues(board)
+
+        posArray=np.array([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1])
+        posArray[startMove]=1
+        while end==2:
+            if(posArray[18]==0):
+                move=MonteCarlo.nnMove(posArray,x)
+                posArray[move+posArray[18]*9]=1
+                posArray[18]=1
+                board.state=TTTEnvironment.stringToState(board,"".join(str(posArray[c]) for c in range(len(posArray))))
+                board.setValues()
+                end=board.check_Win()
+                if end!=2 :
+                    print(board.state)
+                    return end
+            else:
+                move = MonteCarlo.nnMove(posArray,y)
+                posArray[move + posArray[18] * 9] = 1
+                posArray[18] = 0
+                board.state = board.stringToState("".join(str(posArray[c]) for c in range(len(posArray))))
+                board.setValues()
+                end = board.check_Win()
+                if end != 2:
+                    return end
+        print(board.state)
+        return end
+
     def testEachOther(x, y, trials):
         xScore=0
         for m in range(trials):
-            xScore += MonteCarlo.playEachOther(x,y)
-            xScore -= MonteCarlo.playEachOther(y,x)
+            xScore += MonteCarlo.playEachOther(x,y,m%9)
+            xScore -= MonteCarlo.playEachOther(y,x,m%9)
+        xScore += 3*MonteCarlo.playEachOtherStart(x,y)
+        xScore -= 3*MonteCarlo.playEachOtherStart(y,x)
         if xScore > 0:
             print("New network was stronger, obtained a score of +", xScore)
             return x
@@ -458,15 +491,15 @@ x.trainingGame(5000, True)
 for i in range(3000):
     print("GENERATION " + str(i+1))
     #450 games, 25 playouts for each move
-    inputs, outputs = x.createDatabaseForNN(150, 80)
+    inputs, outputs = x.createDatabaseForNN(250, 80)
     previousBrain = copy.deepcopy(brain)
     brain = NeuralNetwork(inputs, outputs, 50)
     print(len(inputs))
     print("Testing new MCTS...")
     print("Training Network with previous data...")
-    brain.trainNetwork(250, 0.003)
+    brain.trainNetwork(25000, 0.003)
     print("Comparing New Neural Net...")
-    brain = MonteCarlo.testEachOther(brain, previousBrain, 5)
+    brain = MonteCarlo.testEachOther(brain, previousBrain, 9)
     print("Self-learning is complete.")
     correct = (np.argmax(brain.predict(inputs), axis=1) == np.argmax(outputs, axis=1)).sum()
     print("Accuracy: ", correct/len(inputs))
