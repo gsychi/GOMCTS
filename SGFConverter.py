@@ -3,17 +3,7 @@ from GoEnvironment import GoEnvironment
 from ourNN import NeuralNetwork
 import numpy as np
 from tempfile import TemporaryFile
-
-weights1 = TemporaryFile()
-weights2 = TemporaryFile()
-weights3 = TemporaryFile()
-weights4 = TemporaryFile()
-weights5 = TemporaryFile()
-bias1 = TemporaryFile()
-bias2 = TemporaryFile()
-bias3 = TemporaryFile()
-bias4 = TemporaryFile()
-bias5 = TemporaryFile()
+import os.path
 
 def findCoordinate(blah):
     sgfCoordinates = list("abcdefghi")
@@ -124,29 +114,36 @@ def createDatabase(games, results, alreadyIn = np.zeros((1,163)), alreadyOut = n
     return inputs, outputs
 
 
-
 games = ["trainingGame1.sgf","trainingGame2.sgf","trainingGame3.sgf","trainingGame4.sgf","trainingGame5.sgf","trainingGame6.sgf", "trainingGame7.sgf", "trainingGame8.sgf", "trainingGame9.sgf", "trainingGame10.sgf", "trainingGame11.sgf"]
 results = [-1, -1, -1, -1, -1, -1, -1, 1, -1, 1, 1]
 
 inputs, outputs = createDatabase(games, results)
 print(inputs.shape)
 
-#print(outputs.shape)
-#print(np.sum(outputs, axis=1))
-
-
 brain = NeuralNetwork(inputs, outputs, 50)
 #load nn information so it can start from the same place for training
-brain.weight_1 = np.load(weights1)
-brain.weight_2 = np.load(weights2)
-brain.weight_3 = np.load(weights3)
-brain.weight_4 = np.load(weights4)
-brain.weight_5 = np.load(weights5)
-brain.bias_1 = np.load(bias1)
-brain.bias_2 = np.load(bias2)
-brain.bias_3 = np.load(bias3)
-brain.bias_4 = np.load(bias4)
-brain.bias_5 = np.load(bias5)
+if os.path.exists("bias_1.npy"):
+    brain.bias_1 = np.load("bias_1.npy")
+if os.path.exists("bias_2.npy"):
+    brain.bias_2 = np.load("bias_2.npy")
+if os.path.exists("bias_3.npy"):
+    brain.bias_3 = np.load("bias_3.npy")
+if os.path.exists("bias_4.npy"):
+    brain.bias_4 = np.load("bias_4.npy")
+if os.path.exists("bias_5.npy"):
+    brain.bias_5 = np.load("bias_5.npy")
+
+if os.path.exists("weight_1.npy"):
+    brain.weight_1 = np.load("weight_1.npy")
+if os.path.exists("weight_2.npy"):
+    brain.weight_2 = np.load("weight_2.npy")
+if os.path.exists("weight_3.npy"):
+    brain.weight_3 = np.load("weight_3.npy")
+if os.path.exists("weight_4.npy"):
+    brain.weight_4 = np.load("weight_4.npy")
+if os.path.exists("weight_5.npy"):
+    brain.weight_5 = np.load("weight_5.npy")
+
 
 print("Start training...")
 for i in range(200):
@@ -158,13 +155,15 @@ for i in range(200):
 print("--FINISH TRAINING--")
 
 #save nn information
-np.save(brain.weight_1, weights1)
-np.save(brain.weight_2, weights2)
-np.save(brain.weight_3, weights3)
-np.save(brain.weight_4, weights4)
-np.save(brain.weight_5, weights5)
-np.save(brain.bias_1, bias1)
-np.save(brain.bias_2, bias2)
-np.save(brain.bias_3, bias3)
-np.save(brain.bias_4, bias4)
-np.save(brain.bias_5, bias5)
+np.save("weight_1.npy", brain.weight_1)
+np.save("weight_2.npy", brain.weight_2)
+np.save("weight_3.npy", brain.weight_3)
+np.save("weight_4.npy", brain.weight_4)
+np.save("weight_5.npy", brain.weight_5)
+np.save("bias_1.npy", brain.bias_1)
+np.save("bias_2.npy", brain.bias_2)
+np.save("bias_3.npy", brain.bias_3)
+np.save("bias_4.npy", brain.bias_4)
+np.save("bias_5.npy", brain.bias_5)
+
+#POINT IS: WE HAVE NOW TRAINED OUR NEURAL NETWORK!!
