@@ -1,6 +1,6 @@
 import numpy as np
 
-class GoEnvironment:
+class GoEnvironment():
 
     def __init__(self):
         self.board = np.zeros((9,9,2))
@@ -15,10 +15,18 @@ class GoEnvironment:
         self.wSurChains = []
         self.bChains = []
         self.bSurChains = []
+        self.blankStones = []
+        self.blankSurStones = []
+        self.blankChains = []
+        self.blankSurChains = []
         self.illegalKo = 999
-        self.turnOfIllegalKo = 999
+        self.passesInARow = 0
 
         self.gamelog = ';FF[4]\nGM[1]\nDT[2018-01-10]\nPB[EKALGO]\nPW[EKALGO]\nBR[30k]\nWR[30k]\nRE[]\nSZ[9]\nKM[7.5]\nRU[chinese]'
+
+    def boardToState(self):
+        player = self.turns % 2
+        return np.append(self.board.flatten(), player)
 
     def addToGameLog(self, i, j, black):
         alphabet = "abcdefghi"
@@ -71,32 +79,48 @@ class GoEnvironment:
                 print(self.output(self.board[i][j]),' ', end='')
             print('\n')
 
+    def customMoveNumber(self, number, colour):
+        if number != 82:
+            if colour == 'B':
+                turn = 0
+            elif colour == 'W':
+                turn = 1
+            self.board[int(number/9)][int(number % 9)][turn] = 1
+        else:
+            self.passesInARow = self.passesInARow + 2
 
     def customMove(self, move, colour):
-        directory = np.zeros(2)
-        directory[0] = int(self.alphabet.index(move[:1]))
-        directory[1] = 9-int(move[1:])
-        if colour == 'B':
-            turn = 0
-        elif colour == 'W':
-            turn = 1
-        self.board[int(directory[1])][int(directory[0])][turn] = 1
+        if move != "PASS":
+            directory = np.zeros(2)
+            directory[0] = int(self.alphabet.index(move[:1]))
+            directory[1] = 9-int(move[1:])
+            if colour == 'B':
+                turn = 0
+            elif colour == 'W':
+                turn = 1
+            self.board[int(directory[1])][int(directory[0])][turn] = 1
+        else:
+            self.passesInARow = self.passesInARow + 2
 
-    def BoardToState(self):
-        for i in range(len(self.plies_before_board)):
-            state = np.concatenate(self.board.flatten(), self.plies_before_board[i].flatten())
-
-        return state
+    def directory(self, move):
+        if move != "PASS":
+            directory = np.zeros(2)
+            directory[0] = int(self.alphabet.index(move[:1]))
+            directory[1] = 9 - int(move[1:])
+            return int(directory[0]*9 + directory[1])
+        else:
+            return 81
 
     def updateBoard(self):
-        self.turnOfIllegalKo = 999
+        if (self.passesInARow>0):
+            self.passesInARow = self.passesInARow - 1
         self.illegalKo = 999
         self.wStones.clear()
         self.wSurStones.clear()
         self.bStones.clear()
         self.bSurStones.clear()
         self.locateChains()
-        if self.turns%2==0:
+        if self.turns%2==1:
             self.captureDeadStonesB()
         else:
             self.captureDeadStonesW()
@@ -113,6 +137,49 @@ class GoEnvironment:
             ba.append((i+1)*9+j)
 
         return ba
+
+    def isIndividual(self,i,j,color, map): #return liberties of each stone
+        flag = True
+        if color == 0: #if finding for black
+            if i!=0:
+                if(map[i-1][j][0] == 1):
+                    flag = False
+            if j!=0:
+                if (map[i][j-1][0] == 1):
+                    flag = False
+            if j!=8:
+                if (map[i][j+1][0] == 1):
+                    flag = False
+            if i!=8:
+                if (map[i + 1][j][0] == 1):
+                    flag = False
+        elif color == 1:
+            if i!=0:
+                if(map[i-1][j][1] == 1):
+                    flag = False
+            if j!=0:
+                if (map[i][j-1][1] == 1):
+                    flag = False
+            if j!=8:
+                if (map[i][j+1][1] == 1):
+                    flag = False
+            if i!=8:
+                if (map[i + 1][j][1] == 1):
+                    flag = False
+        elif color == -1:
+            if i!=0:
+                if(map[i-1][j] == 1):
+                    flag = False
+            if j!=0:
+                if (map[i][j-1] == 1):
+                    flag = False
+            if j!=8:
+                if (map[i][j+1] == 1):
+                    flag = False
+            if i!=8:
+                if (map[i + 1][j] == 1):
+                    flag = False
+        return flag
 
     def searchSurroundings(self, i, j, k):
         required = 4
@@ -138,7 +205,6 @@ class GoEnvironment:
             stoneSurround+=1
         if stoneSurround == required:
             self.illegalKo = (i*9)+j
-            self.turnOfIllegalKo = self.turns
             self.board[i][j][1 - k] = 0
             self.board[i][j][k] = 0
             print('Captured stone ' , ((i * 9) + j))
@@ -162,7 +228,17 @@ class GoEnvironment:
                 black_stone_map[i][j] = int(self.board[i][j][0])
 
         self.wChains = self.findChains(white_stone_map)
+        for i in range(9):
+            for j in range(9):
+                if i== 1 and j == 0:
+                    print(self.isIndividual(i,j,1,self.board))
+                if self.isIndividual(i,j,1,self.board) == True and self.board[i][j][1] == 1:
+                    self.wChains.append([9*i+j])
         self.bChains = self.findChains(black_stone_map)
+        for i in range(9):
+            for j in range(9):
+                if self.isIndividual(i,j,0,self.board) == True and self.board[i][j][0] == 1:
+                    self.bChains.append([9*i+j])
         self.wSurChains = self.surArray(self.wChains)
         self.bSurChains = self.surArray(self.bChains)
 
@@ -202,11 +278,8 @@ class GoEnvironment:
 
     def surroundings(self, chain):
         wrongsurroundings = []
-        print('chain',chain)
         for i in range(len(chain)):
             wrongsurroundings.append((self.surroundReq(int(int(chain[i]/9)),int(int(chain[i]%9)))))
-
-        print('wrongsurroundings',wrongsurroundings)
         flat_sur = []
 
         for x in wrongsurroundings:
@@ -223,7 +296,6 @@ class GoEnvironment:
         sur = []
 
         for i in range(len(unique_list)):
-            print(np.in1d([unique_list[i]],chain))
             if np.in1d([unique_list[i]],chain) == False:
                 sur.append(unique_list[i])
 
@@ -239,38 +311,42 @@ class GoEnvironment:
 
     def ifSurroundedByB(self, require):
         covered = 0
-        print('require', require)
-        print('ifsurroundedbyb',require)
+        #print('require', require)
+        #print('ifsurroundedbyb',require)
         for i in range(len(require)):
             if self.board[int(require[i]/9)][int(require[i]%9)][0]==1:
                 covered+=1
-        print('covered',covered)
+        #print('covered',covered)
         return covered == len(require)
 
     def removeStones(self, stones):
-        print('hi',stones)
+        print('removed',stones)
+        #if the stone is an individual, then enforce illegalKo move.
+        if len(stones)==1:
+            self.illegalKo = stones[0]
+
         for i in range(len(stones)):
             self.board[int(stones[i] / 9)][int(stones[i] % 9)][0] = 0;
             self.board[int(stones[i] / 9)][int(stones[i] % 9)][1] = 0;
 
     def captureDeadStonesW(self):
-        print('wchain', self.wChains)
-        print('wchain length', len(self.wChains))
-        print('wsurchain',self.wSurChains)
+        #print('wchain', self.wChains)
+        #print('wchain length', len(self.wChains))
+        #print('wsurchain',self.wSurChains)
         for i in range(len(self.wChains)):
             if self.ifSurroundedByB(self.wSurChains[i]):
                 self.removeStones(self.wChains[i])
-                print('Captured chain ' , self.wChains[i])
+                #print('Captured chain ' , self.wChains[i])
 
         for i in range(len(self.wStones)):
             self.searchSurroundings(self.wStones[i][0]/9,self.wStones[i][0]%9, 0)
 
     def captureDeadStonesB(self):
-        print('bchain',self.bChains)
+        #print('bchain',self.bChains)
         for i in range(len(self.bChains)):
             if self.ifSurroundedByW(self.bSurChains[i]):
                 self.removeStones(self.bChains[i])
-                print('Captured chain ' , self.bChains[i])
+                #print('Captured chain ' , self.bChains[i])
 
         for i in range(len(self.bStones)):
             self.searchSurroundings(self.bStones[i][0]/9,self.bStones[i][0]%9, 1)
@@ -292,26 +368,60 @@ class GoEnvironment:
             print(self.wChains[i])
             print('Surrounding Stones: ' , self.wSurChains[i])
 
+    def checkWin(self):
+        score_white = 5.5
+        score_black = 0
+        for i in range(9):
+            for j in range(9):
+                score_white += int(self.board[i][j][1])
+                score_black += int(self.board[i][j][0])
 
-go = GoEnvironment()
-go.customMove('A3','B')
-go.customMove('B3','B')
-go.customMove('C3','B')
-go.customMove('D3','W')
-go.customMove('A4','W')
-go.customMove('A2','W')
-go.customMove('B4','W')
-go.customMove('B2','W')
-go.customMove('C4','W')
-go.customMove('C2','W')
+        blank_stone_map = np.ones((9,9))
 
-go.printBoard()
-go.locateChains()
-print(go.wChains)
-print(go.bChains)
-print(go.wSurChains)
-print(go.bSurChains)
+        for i in range(9):
+            for j in range(9):
+                if int(self.board[i][j][1]) == 0 and int(self.board[i][j][0]) == 0:
+                    blank_stone_map[i][j] = 1
+                else:
+                    blank_stone_map[i][j] = 0
 
-go.updateBoard()
-go.printBoard()
+        #print(blank_stone_map)
+        self.blankChains = self.findChains(blank_stone_map)
+        for i in range(9):
+            for j in range(9):
+                if self.isIndividual(i,j,-1,blank_stone_map) == True and blank_stone_map[i][j] == 1:
+                    self.blankChains.append([9*i+j])
 
+        unique = []
+        for i in self.blankChains:
+            i.sort(key=int)
+            if i not in unique:
+                unique.append(i)
+
+        self.blankChains = unique
+        #print(self.blankChains)
+        self.blankSurChains = self.surArray(self.blankChains)
+
+        for i in range(len(self.blankSurChains)):
+            if self.ifSurroundedByB(self.blankSurChains[i]) == True:
+                score_black+=len(self.blankChains[i])
+            elif self.ifSurroundedByW(self.blankSurChains[i]) == True:
+                score_white+=len(self.blankChains[i])
+
+        print('Black Score: ' , score_black)
+        print('White Score: ' , score_white)
+
+        if self.passesInARow == 2:
+            if score_black>score_white:
+                return 1
+            else:
+                return -1
+        else:
+            return 2
+
+    def legalMoves(self):
+        filledUpBoard = np.sum(self.board, axis=2).flatten()
+        legalMoves = 1 - filledUpBoard
+        if self.illegalKo != 999:
+            legalMoves[self.illegalKo] = 0
+        return legalMoves

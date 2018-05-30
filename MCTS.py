@@ -207,7 +207,7 @@ class MonteCarlo():
         temp = TTTEnvironment()
         temp.state = TTTEnvironment.stringToState(temp, position)
         temp.setValues()
-        noiseConstant = 0.14/(2.4*(1+np.sum(temp.Xstate.flatten())))
+        noiseConstant = 0.5/(4*(1+np.sum(temp.Xstate.flatten())))
         if noise==True:
             noise = np.random.rand(1, 9)*noiseConstant*2-noiseConstant
             moveChoice = moveChoice + noise
@@ -491,7 +491,7 @@ x.trainingGame(5000, True)
 for i in range(3000):
     print("GENERATION " + str(i+1))
     #450 games, 25 playouts for each move
-    inputs, outputs = x.createDatabaseForNN(250, 80)
+    inputs, outputs = x.createDatabaseForNN(50, 5)
     previousBrain = copy.deepcopy(brain)
     brain = NeuralNetwork(inputs, outputs, 50)
     print(len(inputs))
