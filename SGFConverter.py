@@ -79,11 +79,36 @@ def scrapeGame(game, result):
 
     return statesExplored, statesWin
 
-def createDatabaes(games, results):
+def createDatabase(games, results):
     inputs = np.zeros((1, 163))
     outputs = np.zeros((1, 82))
-    
-    return "wow"
-inputs, outputs = scrapeGame("trainingGame1.sgf",-1)
-print(inputs.shape)
-print(outputs.shape)
+    for i in range(len(games)):
+        newInputs, newOutputs = scrapeGame(games[i],results[i])
+        if i == 0:
+            inputs = newInputs
+            outputs = newOutputs
+        else:
+            # otherwise, check if input is already in dataset.
+            removeDirectories = []
+            for k in range(len(inputs)):
+                for j in range(len(newInputs)):
+                    if np.sum(abs(inputs[k] - newInputs[j])) == 0:
+                        # If information is already in dataset, edit existing data
+                        outputs[k] = outputs[k] + newOutputs[j]
+                        removeDirectories.append(j)
+            removeDirectories.sort()
+            while len(removeDirectories) > 0:
+                index = removeDirectories.pop()
+                newInputs = np.delete(newInputs, index, axis=0)
+                newOutputs = np.delete(newOutputs, index, axis=0)
+            inputs = np.concatenate((inputs, newInputs), axis=0)
+            outputs = np.concatenate((outputs, newOutputs), axis=0)
+
+    return inputs, outputs
+
+games = ["trainingGame1.sgf"]
+results = [-1]
+
+inStuff, outStuff = createDatabase(games, results)
+print(inStuff.shape)
+print(outStuff.shape)
