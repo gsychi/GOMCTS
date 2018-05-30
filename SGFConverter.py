@@ -117,8 +117,15 @@ def createDatabase(games, results, alreadyIn = np.zeros((1,163)), alreadyOut = n
 games = ["trainingGame1.sgf","trainingGame2.sgf","trainingGame3.sgf","trainingGame4.sgf","trainingGame5.sgf","trainingGame6.sgf", "trainingGame7.sgf", "trainingGame8.sgf", "trainingGame9.sgf", "trainingGame10.sgf", "trainingGame11.sgf"]
 results = [-1, -1, -1, -1, -1, -1, -1, 1, -1, 1, 1]
 
-inputs, outputs = createDatabase(games, results)
-print(inputs.shape)
+
+training = False
+
+inputs = np.zeros((1, 163))
+outputs = np.zeros((1, 82))
+
+if training:
+    inputs, outputs = createDatabase(games, results)
+    print(inputs.shape)
 
 brain = NeuralNetwork(inputs, outputs, 50)
 #load nn information so it can start from the same place for training
@@ -146,13 +153,14 @@ if os.path.exists("weight_5.npy"):
 
 
 print("Start training...")
-for i in range(200):
-    print("Epoch ", str(i+1))
-    brain.trainNetwork(200, 0.005)
-    correct = (np.argmax(brain.predict(inputs), axis=1) == np.argmax(outputs, axis=1)).sum()
-    print("Accuracy: ", correct/len(inputs))
-    print("Total datasets: ", len(inputs))
-print("--FINISH TRAINING--")
+if training:
+    for i in range(500):
+        print("Epoch ", str(i+1))
+        brain.trainNetwork(200, 0.005)
+        correct = (np.argmax(brain.predict(inputs), axis=1) == np.argmax(outputs, axis=1)).sum()
+        print("Accuracy: ", correct/len(inputs))
+        print("Total datasets: ", len(inputs))
+    print("--FINISH TRAINING--")
 
 #save nn information
 np.save("weight_1.npy", brain.weight_1)
@@ -166,4 +174,35 @@ np.save("bias_3.npy", brain.bias_3)
 np.save("bias_4.npy", brain.bias_4)
 np.save("bias_5.npy", brain.bias_5)
 
-#POINT IS: WE HAVE NOW TRAINED OUR NEURAL NETWORK!!
+#We have now trained our neural network.
+
+newBoard = GoEnvironment()
+
+humanBlack = False
+humanWhite = True
+
+newBoard.printBoard()
+
+for i in range(100):
+    while newBoard.checkWin() == 2:
+        predictedMove = np.argmax(brain.predict(newBoard.boardToState())*newBoard.legalMoves())
+        #print(predictedMove)
+        if newBoard.turns % 2 == 0:
+            if not humanBlack:
+                newBoard.customMoveNumber(predictedMove, "B")
+            else:
+                humanMove = input("Choose your coordinate:")
+                newBoard.customMove(humanMove, "B")
+
+        else:
+            if not humanWhite:
+                newBoard.customMoveNumber(predictedMove, "W")
+            else:
+                humanMove = input("Choose your coordinate:")
+                newBoard.customMove(humanMove, "W")
+
+        newBoard.updateBoard()
+        newBoard.turns = newBoard.turns + 1
+        newBoard.printBoard()
+
+print(newBoard.printScore())

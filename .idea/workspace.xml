@@ -2,7 +2,18 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="02f5fc88-ce52-42a5-8bdb-e8054efa7383" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/GoEnvironment.py" afterPath="$PROJECT_DIR$/GoEnvironment.py" />
       <change beforePath="$PROJECT_DIR$/SGFConverter.py" afterPath="$PROJECT_DIR$/SGFConverter.py" />
+      <change beforePath="$PROJECT_DIR$/bias_1.npy" afterPath="$PROJECT_DIR$/bias_1.npy" />
+      <change beforePath="$PROJECT_DIR$/bias_2.npy" afterPath="$PROJECT_DIR$/bias_2.npy" />
+      <change beforePath="$PROJECT_DIR$/bias_3.npy" afterPath="$PROJECT_DIR$/bias_3.npy" />
+      <change beforePath="$PROJECT_DIR$/bias_4.npy" afterPath="$PROJECT_DIR$/bias_4.npy" />
+      <change beforePath="$PROJECT_DIR$/bias_5.npy" afterPath="$PROJECT_DIR$/bias_5.npy" />
+      <change beforePath="$PROJECT_DIR$/weight_1.npy" afterPath="$PROJECT_DIR$/weight_1.npy" />
+      <change beforePath="$PROJECT_DIR$/weight_2.npy" afterPath="$PROJECT_DIR$/weight_2.npy" />
+      <change beforePath="$PROJECT_DIR$/weight_3.npy" afterPath="$PROJECT_DIR$/weight_3.npy" />
+      <change beforePath="$PROJECT_DIR$/weight_4.npy" afterPath="$PROJECT_DIR$/weight_4.npy" />
+      <change beforePath="$PROJECT_DIR$/weight_5.npy" afterPath="$PROJECT_DIR$/weight_5.npy" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -16,8 +27,8 @@
       <file leaf-file-name="MCTS.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/MCTS.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-14">
-              <caret line="492" column="41" lean-forward="true" selection-start-line="492" selection-start-column="41" selection-end-line="492" selection-end-column="41" />
+            <state relative-caret-position="134">
+              <caret line="504" column="15" lean-forward="false" selection-start-line="504" selection-start-column="15" selection-end-line="504" selection-end-column="15" />
               <folding>
                 <element signature="e#10730#11074#0" expanded="false" />
                 <element signature="e#11139#14395#0" expanded="false" />
@@ -29,8 +40,8 @@
       <file leaf-file-name="SGFConverter.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/SGFConverter.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="284">
-              <caret line="157" column="39" lean-forward="true" selection-start-line="157" selection-start-column="39" selection-end-line="157" selection-end-column="39" />
+            <state relative-caret-position="-343">
+              <caret line="8" column="21" lean-forward="true" selection-start-line="8" selection-start-column="21" selection-end-line="8" selection-end-column="21" />
               <folding>
                 <element signature="e#91#130#0" expanded="true" />
                 <element signature="e#446#880#0" expanded="false" />
@@ -41,21 +52,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ourNN.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ourNN.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="120">
-              <caret line="20" column="89" lean-forward="true" selection-start-line="20" selection-start-column="54" selection-end-line="20" selection-end-column="89" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="GoEnvironment.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/GoEnvironment.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="96">
-              <caret line="60" column="0" lean-forward="false" selection-start-line="60" selection-start-column="0" selection-end-line="60" selection-end-column="0" />
+            <state relative-caret-position="134">
+              <caret line="94" column="0" lean-forward="false" selection-start-line="94" selection-start-column="0" selection-end-line="94" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -72,15 +73,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>makemove</find>
-      <find>makeMove</find>
-      <find>array</find>
-      <find>x.</find>
-      <find>surroundings</find>
-      <find>NNevaluation</find>
-      <find>position</find>
-      <find>initialize</find>
-      <find>trainingMove</find>
       <find>updateEvals</find>
       <find>toArray</find>
       <find>chooseMove</find>
@@ -99,18 +91,27 @@
       <find>returnAllmoves</find>
       <find>outputs</find>
       <find>boardToState</find>
-      <find>self.alphabet.split(&quot;&quot;)</find>
       <find>woutputs</find>
       <find>self.neuralNetwork</find>
+      <find>self.alphabet.split(&quot;&quot;)</find>
+      <find>legalMoves</find>
+      <find>checkWin</find>
+      <find>printScore</find>
+      <find>updateBoard</find>
+      <find>searchSurroundings(</find>
+      <find>check_Win</find>
+      <find>self.bStones</find>
+      <find>printBoard</find>
+      <find>CUSTOMMOVE</find>
     </findStrings>
     <replaceStrings>
       <replace>self.state</replace>
       <replace>x</replace>
       <replace>self.bias_2</replace>
       <replace>outStuff</replace>
-      <replace>list(self.alphabet)</replace>
       <replace>wOutputs</replace>
       <replace>brain</replace>
+      <replace>list(self.alphabet)</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -329,7 +330,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1440" height="829" extended-state="6" />
+    <frame x="0" y="23" width="1440" height="828" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -337,7 +338,7 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.4583884" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.37037036" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -682,18 +683,7 @@
         <state relative-caret-position="231">
           <caret line="11" column="16" lean-forward="false" selection-start-line="11" selection-start-column="16" selection-end-line="11" selection-end-column="16" />
           <folding>
-            <element signature="e#0#64#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/MCTS.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-14">
-          <caret line="492" column="41" lean-forward="true" selection-start-line="492" selection-start-column="41" selection-end-line="492" selection-end-column="41" />
-          <folding>
-            <element signature="e#10730#11074#0" expanded="false" />
-            <element signature="e#11139#14395#0" expanded="false" />
+            <element signature="e#0#64#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -722,26 +712,37 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/GoEnvironment.py">
+    <entry file="file://$PROJECT_DIR$/ourNN.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="96">
-          <caret line="60" column="0" lean-forward="false" selection-start-line="60" selection-start-column="0" selection-end-line="60" selection-end-column="0" />
+        <state relative-caret-position="162">
+          <caret line="22" column="81" lean-forward="true" selection-start-line="22" selection-start-column="81" selection-end-line="22" selection-end-column="81" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ourNN.py">
+    <entry file="file://$PROJECT_DIR$/MCTS.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="20" column="89" lean-forward="true" selection-start-line="20" selection-start-column="54" selection-end-line="20" selection-end-column="89" />
+        <state relative-caret-position="134">
+          <caret line="504" column="15" lean-forward="false" selection-start-line="504" selection-start-column="15" selection-end-line="504" selection-end-column="15" />
+          <folding>
+            <element signature="e#10730#11074#0" expanded="false" />
+            <element signature="e#11139#14395#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/GoEnvironment.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="134">
+          <caret line="94" column="0" lean-forward="false" selection-start-line="94" selection-start-column="0" selection-end-line="94" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/SGFConverter.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="284">
-          <caret line="157" column="39" lean-forward="true" selection-start-line="157" selection-start-column="39" selection-end-line="157" selection-end-column="39" />
+        <state relative-caret-position="-343">
+          <caret line="8" column="21" lean-forward="true" selection-start-line="8" selection-start-column="21" selection-end-line="8" selection-end-column="21" />
           <folding>
             <element signature="e#91#130#0" expanded="true" />
             <element signature="e#446#880#0" expanded="false" />
