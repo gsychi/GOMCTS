@@ -399,7 +399,12 @@ class MonteCarlo():
         input=np.reshape(position,(1,19))
         print(nn)
         output=nn.predict(input)
-        return int(np.argmax(output, axis=1))
+        pos="".join(str(position[c]) for c in range(len(position)))
+        tempBoard=TTTEnvironment()
+        tempBoard.state=tempBoard.stringToState(pos)
+        tempBoard.setValues()
+        legalOutput=np.multiply(output,tempBoard.legalMove())
+        return int(np.argmax(legalOutput, axis=1))
 
     def playEachOther(x, y):
         end=2
@@ -413,10 +418,11 @@ class MonteCarlo():
                 move=MonteCarlo.nnMove(posArray,x)
                 posArray[move+posArray[18]*9]=1
                 posArray[18]=1
-                board.state=TTTEnvironment.stringToState(board,''.join(str(x) for x in posArray))
+                board.state=TTTEnvironment.stringToState(board,"".join(str(posArray[c]) for c in range(len(posArray))))
                 board.setValues()
                 end=board.check_Win()
                 if end!=2 :
+                    print(board.state)
                     return end
             else:
                 move = MonteCarlo.nnMove(posArray,y)
@@ -427,6 +433,7 @@ class MonteCarlo():
                 end = board.check_Win()
                 if end != 2:
                     return end
+        print(board.state)
         return end
 
     def testEachOther(x, y, trials):
@@ -451,13 +458,13 @@ x.trainingGame(5000, True)
 for i in range(3000):
     print("GENERATION " + str(i+1))
     #450 games, 25 playouts for each move
-    inputs, outputs = x.createDatabaseForNN(250, 80)
+    inputs, outputs = x.createDatabaseForNN(150, 80)
     previousBrain = copy.deepcopy(brain)
     brain = NeuralNetwork(inputs, outputs, 50)
     print(len(inputs))
     print("Testing new MCTS...")
     print("Training Network with previous data...")
-    brain.trainNetwork(25000, 0.003)
+    brain.trainNetwork(250, 0.003)
     print("Comparing New Neural Net...")
     brain = MonteCarlo.testEachOther(brain, previousBrain, 5)
     print("Self-learning is complete.")
