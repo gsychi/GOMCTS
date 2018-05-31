@@ -15,7 +15,7 @@ class NeuralNetwork:
 
         self.X = X
         self.y = y
-        self.momentum = 0.8
+        self.momentum = 0
 
         # define weight and bias for input -> hidden and hidden -> input
         self.weight_1 = np.random.uniform(-1.0, 1.0, (len(self.X[0]), self.hiddenNodes))

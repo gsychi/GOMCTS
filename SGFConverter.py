@@ -209,8 +209,7 @@ results = [-1, -1, -1, -1, -1, -1, -1, 1, -1, 1, 1, -1, 1, -1, -1, 1, 1, 1, 1, 1
            -1, -1, -1, -1, -1, -1, -1, 1, -1, 1, 1, -1, 1, -1, -1, 1, 1, 1, 1, 1, 1, 1,
            ]
 
-
-training = True
+training = False
 newDatabase = False
 
 inputs = np.zeros((1, 163))
@@ -257,10 +256,11 @@ maxAccuracy = initC/len(inputs)
 print(maxAccuracy)
 print("Start training...")
 if training:
-    for i in range(2000):
+    for i in range(20000):
         print("Epoch ", str(i+1))
-        brain.trainNetwork(10, 0.005)
+        brain.trainNetwork(50, 0.01)
         correct = (np.argmax(brain.predict(inputs), axis=1) == np.argmax(outputs, axis=1)).sum()
+        print(brain.predict(inputs[0]))
         print("Accuracy: ", correct/len(inputs))
         print("Total datasets: ", len(inputs))
         if correct/len(inputs) > maxAccuracy:
@@ -295,7 +295,7 @@ np.save("bias_5.npy", brain.bias_5)
 
 newBoard = GoEnvironment()
 
-humanBlack = False
+humanBlack = True
 humanWhite = False
 
 newBoard.printBoard()

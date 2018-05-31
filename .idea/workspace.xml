@@ -2,11 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="02f5fc88-ce52-42a5-8bdb-e8054efa7383" name="Default" comment="">
-      <change beforePath="" afterPath="$PROJECT_DIR$/92_04.sgf" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/92_05.sgf" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/92_08.sgf" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/92_09.sgf" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/92_12.sgf" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change beforePath="$PROJECT_DIR$/SGFConverter.py" afterPath="$PROJECT_DIR$/SGFConverter.py" />
       <change beforePath="$PROJECT_DIR$/bias_1.npy" afterPath="" />
@@ -33,8 +28,8 @@
       <file leaf-file-name="SGFConverter.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/SGFConverter.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="77">
-              <caret line="256" column="18" lean-forward="true" selection-start-line="256" selection-start-column="18" selection-end-line="256" selection-end-column="18" />
+            <state relative-caret-position="351">
+              <caret line="309" column="34" lean-forward="true" selection-start-line="309" selection-start-column="34" selection-end-line="309" selection-end-column="34" />
               <folding>
                 <element signature="e#91#130#0" expanded="true" />
                 <element signature="e#2125#3526#0" expanded="false" />
@@ -57,8 +52,8 @@
       <file leaf-file-name="ourNN.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ourNN.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="200">
-              <caret line="17" column="27" lean-forward="false" selection-start-line="17" selection-start-column="27" selection-end-line="17" selection-end-column="27" />
+            <state relative-caret-position="182">
+              <caret line="71" column="0" lean-forward="true" selection-start-line="71" selection-start-column="0" selection-end-line="71" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -85,9 +80,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>toArray</find>
-      <find>chooseMove</find>
-      <find>set</find>
       <find>setValues</find>
       <find>Game</find>
       <find>processed</find>
@@ -115,6 +107,9 @@
       <find>printBoard</find>
       <find>CUSTOMMOVE</find>
       <find>2018-</find>
+      <find>0.06</find>
+      <find>synapses</find>
+      <find>saving syna</find>
     </findStrings>
     <replaceStrings>
       <replace>self.state</replace>
@@ -362,7 +357,7 @@
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.36988112" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.29326287" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
@@ -719,16 +714,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/ourNN.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="200">
-          <caret line="17" column="27" lean-forward="false" selection-start-line="17" selection-start-column="27" selection-end-line="17" selection-end-column="27" />
+        <state relative-caret-position="182">
+          <caret line="71" column="0" lean-forward="true" selection-start-line="71" selection-start-column="0" selection-end-line="71" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/SGFConverter.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="77">
-          <caret line="256" column="18" lean-forward="true" selection-start-line="256" selection-start-column="18" selection-end-line="256" selection-end-column="18" />
+        <state relative-caret-position="351">
+          <caret line="309" column="34" lean-forward="true" selection-start-line="309" selection-start-column="34" selection-end-line="309" selection-end-column="34" />
           <folding>
             <element signature="e#91#130#0" expanded="true" />
             <element signature="e#2125#3526#0" expanded="false" />
