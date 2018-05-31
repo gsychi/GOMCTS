@@ -22,7 +22,7 @@ class GoEnvironment():
         self.illegalKo = 999
         self.passesInARow = 0
 
-        self.gamelog = ';FF[4]\nGM[1]\nDT[2018-01-10]\nPB[EKALGO]\nPW[EKALGO]\nBR[30k]\nWR[30k]\nRE[]\nSZ[9]\nKM[7.5]\nRU[chinese]'
+        self.gamelog = ';FF[4]\nGM[1]\nDT[2018-05-30]\nPB[GOMCTS]\nPW[GOMCTS]\nBR[30k]\nWR[30k]\nRE[]\nSZ[9]\nKM[5.5]\nRU[chinese]'
 
     def boardToState(self):
         player = self.turns % 2

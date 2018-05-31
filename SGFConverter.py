@@ -86,7 +86,7 @@ def createDatabase(games, results, alreadyIn = np.zeros((1,163)), alreadyOut = n
     outputs = alreadyOut
 
     for i in range(len(games)):
-        newInputs, newOutputs = scrapeGame(games[i],results[i])
+        newInputs, newOutputs = scrapeGame(games[i], results[i])
         if i == 0:
             inputs = newInputs
             outputs = newOutputs
@@ -114,8 +114,12 @@ def createDatabase(games, results, alreadyIn = np.zeros((1,163)), alreadyOut = n
     return inputs, outputs
 
 
-games = ["trainingGame1.sgf","trainingGame2.sgf","trainingGame3.sgf","trainingGame4.sgf","trainingGame5.sgf","trainingGame6.sgf", "trainingGame7.sgf", "trainingGame8.sgf", "trainingGame9.sgf", "trainingGame10.sgf", "trainingGame11.sgf"]
-results = [-1, -1, -1, -1, -1, -1, -1, 1, -1, 1, 1]
+games = ["trainingGame1.sgf","trainingGame2.sgf","trainingGame3.sgf","trainingGame4.sgf","trainingGame5.sgf",
+         "trainingGame6.sgf", "trainingGame7.sgf", "trainingGame8.sgf", "trainingGame9.sgf", "trainingGame10.sgf",
+         "trainingGame11.sgf", "trainingGame12.sgf", "trainingGame13.sgf", "trainingGame14.sgf", "trainingGame15.sgf",
+         "trainingGame16.sgf", "trainingGame17.sgf"
+         ]
+results = [-1, -1, -1, -1, -1, -1, -1, 1, -1, 1, 1, -1, 1, -1, -1, 1, 1]
 
 
 training = False
@@ -179,17 +183,24 @@ np.save("bias_5.npy", brain.bias_5)
 newBoard = GoEnvironment()
 
 humanBlack = False
-humanWhite = True
+humanWhite = False
 
 newBoard.printBoard()
 
 for i in range(100):
     while newBoard.checkWin() == 2:
         predictedMove = np.argmax(brain.predict(newBoard.boardToState())*newBoard.legalMoves())
-        #print(predictedMove)
+        sgfCoordinates = list("abcdefghi")
+        if predictedMove!=81:
+            row = int(predictedMove/9)
+            column = int(predictedMove%9)
+            coordinate = "["+str(sgfCoordinates[row]+sgfCoordinates[column])+"]"
+        else:
+            coordinate = "[]"
         if newBoard.turns % 2 == 0:
             if not humanBlack:
                 newBoard.customMoveNumber(predictedMove, "B")
+                newBoard.gamelog += ";B" + coordinate + "\n"
             else:
                 humanMove = input("Choose your coordinate:")
                 newBoard.customMove(humanMove, "B")
@@ -197,6 +208,7 @@ for i in range(100):
         else:
             if not humanWhite:
                 newBoard.customMoveNumber(predictedMove, "W")
+                newBoard.gamelog += ";W" + coordinate + "\n"
             else:
                 humanMove = input("Choose your coordinate:")
                 newBoard.customMove(humanMove, "W")
@@ -206,3 +218,4 @@ for i in range(100):
         newBoard.printBoard()
 
 print(newBoard.printScore())
+print(newBoard.gamelog)
