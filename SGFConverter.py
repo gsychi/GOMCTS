@@ -31,6 +31,60 @@ def returnAllMoves(string):
                 h.append(row+str(column))
     return h
 
+def findActualCoordinate(alphabet):
+    actualCoordinates = list("ABCDEFGHJ")
+    for i in range(len(actualCoordinates)):
+        if alphabet == actualCoordinates[i]:
+            return i
+    return -1
+
+def turn180(string):
+
+    newlist = []
+    for move in string:
+        if move != "PASS":
+            row = move[:1]
+            column = 10-int(move[1:])
+            newlist.append(row+str(column))
+        else:
+            newlist.append("PASS")
+
+    return newlist
+
+def turn90CC(string):
+    actualCoordinates = list("ABCDEFGHJ")
+    newlist = []
+    for move in string:
+        if move != "PASS":
+            row = actualCoordinates[9-int(move[1:])]
+            column = findActualCoordinate(move[:1])+1
+            newlist.append(row+str(column))
+        else:
+            newlist.append("PASS")
+    return newlist
+
+def turn90C(string):
+    actualCoordinates = list("ABCDEFGHJ")
+    newlist = []
+    for move in string:
+        if move != "PASS":
+            row = actualCoordinates[int(move[1:])-1]
+            column = 9-findActualCoordinate(move[:1])
+            newlist.append(row+str(column))
+        else:
+            newlist.append("PASS")
+    return newlist
+
+#testing
+sample_move = ["A2","B2","C3","PASS","H6"]
+print(turn180(sample_move))
+print(turn90C(sample_move))
+print(turn90CC(sample_move))
+
+
+#end of testing
+
+
 def scrapeGame(game, result):
     go = GoEnvironment()
 
