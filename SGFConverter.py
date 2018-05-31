@@ -43,6 +43,7 @@ def turn180(string):
     newlist = []
     for move in string:
         if move != "PASS":
+            print("MOVE: ", move)
             row = move[:1]
             column = 10-int(move[1:])
             newlist.append(row+str(column))
@@ -75,21 +76,11 @@ def turn90C(string):
             newlist.append("PASS")
     return newlist
 
-#testing
-sample_move = ["A2","B2","C3","PASS","H6"]
-print(turn180(sample_move))
-print(turn90C(sample_move))
-print(turn90CC(sample_move))
-
-
-#end of testing
-
-
 def scrapeGame(game, result):
     go = GoEnvironment()
 
     #moves are downloaded
-    a = returnAllMoves(game)
+    a = game
     print(a)
 
     statesExplored = np.zeros((1, 163))  # Store it as an array of directories for the seen stuff
@@ -168,25 +159,77 @@ def createDatabase(games, results, alreadyIn = np.zeros((1,163)), alreadyOut = n
     return inputs, outputs
 
 
-games = ["trainingGame1.sgf","trainingGame2.sgf","trainingGame3.sgf","trainingGame4.sgf","trainingGame5.sgf",
-         "trainingGame6.sgf", "trainingGame7.sgf", "trainingGame8.sgf", "trainingGame9.sgf", "trainingGame10.sgf",
-         "trainingGame11.sgf", "trainingGame12.sgf", "trainingGame13.sgf", "trainingGame14.sgf", "trainingGame15.sgf",
-         "trainingGame16.sgf", "trainingGame17.sgf"
+games = [returnAllMoves("trainingGame1.sgf"), returnAllMoves("trainingGame2.sgf"), returnAllMoves("trainingGame3.sgf"),
+         returnAllMoves("trainingGame4.sgf"), returnAllMoves("trainingGame5.sgf"), returnAllMoves("trainingGame6.sgf"),
+         returnAllMoves("trainingGame7.sgf"), returnAllMoves("trainingGame8.sgf"), returnAllMoves("trainingGame9.sgf"),
+         returnAllMoves("trainingGame10.sgf"), returnAllMoves("trainingGame11.sgf"), returnAllMoves("trainingGame12.sgf"),
+         returnAllMoves("trainingGame13.sgf"), returnAllMoves("trainingGame14.sgf"), returnAllMoves("trainingGame15.sgf"),
+         returnAllMoves("trainingGame16.sgf"), returnAllMoves("trainingGame17.sgf"), returnAllMoves("92_04.sgf"),
+
+         turn180(returnAllMoves("trainingGame1.sgf")), turn180(returnAllMoves("trainingGame2.sgf")),
+         turn180(returnAllMoves("trainingGame3.sgf")), turn180(returnAllMoves("trainingGame4.sgf")),
+         turn180(returnAllMoves("trainingGame5.sgf")), turn180(returnAllMoves("trainingGame6.sgf")),
+         turn180(returnAllMoves("trainingGame7.sgf")), turn180(returnAllMoves("trainingGame8.sgf")),
+         turn180(returnAllMoves("trainingGame9.sgf")), turn180(returnAllMoves("trainingGame10.sgf")),
+         turn180(returnAllMoves("trainingGame11.sgf")), turn180(returnAllMoves("trainingGame12.sgf")),
+         turn180(returnAllMoves("trainingGame13.sgf")), turn180(returnAllMoves("trainingGame14.sgf")),
+         turn180(returnAllMoves("trainingGame15.sgf")), turn180(returnAllMoves("trainingGame16.sgf")),
+         turn180(returnAllMoves("trainingGame17.sgf")), turn180(returnAllMoves("92_04.sgf")),
+         turn180(returnAllMoves("92_05.sgf")), turn180(returnAllMoves("92_08.sgf")),
+         turn180(returnAllMoves("92_09.sgf")), turn180(returnAllMoves("92_12.sgf")),
+
+         turn90C(returnAllMoves("trainingGame1.sgf")), turn90C(returnAllMoves("trainingGame2.sgf")),
+         turn90C(returnAllMoves("trainingGame3.sgf")), turn90C(returnAllMoves("trainingGame4.sgf")),
+         turn90C(returnAllMoves("trainingGame5.sgf")), turn90C(returnAllMoves("trainingGame6.sgf")),
+         turn90C(returnAllMoves("trainingGame7.sgf")), turn90C(returnAllMoves("trainingGame8.sgf")),
+         turn90C(returnAllMoves("trainingGame9.sgf")), turn90C(returnAllMoves("trainingGame10.sgf")),
+         turn90C(returnAllMoves("trainingGame11.sgf")), turn90C(returnAllMoves("trainingGame12.sgf")),
+         turn90C(returnAllMoves("trainingGame13.sgf")), turn90C(returnAllMoves("trainingGame14.sgf")),
+         turn90C(returnAllMoves("trainingGame15.sgf")), turn90C(returnAllMoves("trainingGame16.sgf")),
+         turn90C(returnAllMoves("trainingGame17.sgf")), turn90C(returnAllMoves("92_04.sgf")),
+         turn90C(returnAllMoves("92_05.sgf")), turn90C(returnAllMoves("92_08.sgf")),
+         turn90C(returnAllMoves("92_09.sgf")), turn90C(returnAllMoves("92_12.sgf")),
+
+         turn90CC(returnAllMoves("trainingGame1.sgf")), turn90CC(returnAllMoves("trainingGame2.sgf")),
+         turn90CC(returnAllMoves("trainingGame3.sgf")), turn90CC(returnAllMoves("trainingGame4.sgf")),
+         turn90CC(returnAllMoves("trainingGame5.sgf")), turn90CC(returnAllMoves("trainingGame6.sgf")),
+         turn90CC(returnAllMoves("trainingGame7.sgf")), turn90CC(returnAllMoves("trainingGame8.sgf")),
+         turn90CC(returnAllMoves("trainingGame9.sgf")), turn90CC(returnAllMoves("trainingGame10.sgf")),
+         turn90CC(returnAllMoves("trainingGame11.sgf")), turn90CC(returnAllMoves("trainingGame12.sgf")),
+         turn90CC(returnAllMoves("trainingGame13.sgf")), turn90CC(returnAllMoves("trainingGame14.sgf")),
+         turn90CC(returnAllMoves("trainingGame15.sgf")), turn90CC(returnAllMoves("trainingGame16.sgf")),
+         turn90CC(returnAllMoves("trainingGame17.sgf")), turn90CC(returnAllMoves("92_04.sgf")),
+         turn90CC(returnAllMoves("92_05.sgf")), turn90CC(returnAllMoves("92_08.sgf")),
+         turn90CC(returnAllMoves("92_09.sgf")), turn90CC(returnAllMoves("92_12.sgf"))
          ]
-results = [-1, -1, -1, -1, -1, -1, -1, 1, -1, 1, 1, -1, 1, -1, -1, 1, 1]
+
+results = [-1, -1, -1, -1, -1, -1, -1, 1, -1, 1, 1, -1, 1, -1, -1, 1, 1, 1, 1, 1, 1, 1,
+           -1, -1, -1, -1, -1, -1, -1, 1, -1, 1, 1, -1, 1, -1, -1, 1, 1, 1, 1, 1, 1, 1,
+           -1, -1, -1, -1, -1, -1, -1, 1, -1, 1, 1, -1, 1, -1, -1, 1, 1, 1, 1, 1, 1, 1,
+           -1, -1, -1, -1, -1, -1, -1, 1, -1, 1, 1, -1, 1, -1, -1, 1, 1, 1, 1, 1, 1, 1,
+           ]
 
 
-training = False
+training = True
+newDatabase = False
 
 inputs = np.zeros((1, 163))
 outputs = np.zeros((1, 82))
 
-if training:
+if os.path.exists("inputs.npy"):
+    inputs = np.load("inputs.npy")
+if os.path.exists("outputs.npy"):
+    outputs = np.load("outputs.npy")
+
+if newDatabase:
     inputs, outputs = createDatabase(games, results)
+    np.save("inputs.npy", inputs)
+    np.save("outputs.npy", outputs)
     print(inputs.shape)
 
-brain = NeuralNetwork(inputs, outputs, 50)
+brain = NeuralNetwork(inputs, outputs, 55)
 #load nn information so it can start from the same place for training
+
 if os.path.exists("bias_1.npy"):
     brain.bias_1 = np.load("bias_1.npy")
 if os.path.exists("bias_2.npy"):
@@ -209,15 +252,31 @@ if os.path.exists("weight_4.npy"):
 if os.path.exists("weight_5.npy"):
     brain.weight_5 = np.load("weight_5.npy")
 
-
+initC = (np.argmax(brain.predict(inputs), axis=1) == np.argmax(outputs, axis=1)).sum()
+maxAccuracy = initC/len(inputs)
+print(maxAccuracy)
 print("Start training...")
 if training:
-    for i in range(500):
+    for i in range(2000):
         print("Epoch ", str(i+1))
-        brain.trainNetwork(200, 0.005)
+        brain.trainNetwork(10, 0.005)
         correct = (np.argmax(brain.predict(inputs), axis=1) == np.argmax(outputs, axis=1)).sum()
         print("Accuracy: ", correct/len(inputs))
         print("Total datasets: ", len(inputs))
+        if correct/len(inputs) > maxAccuracy:
+            maxAccuracy = correct/len(inputs)
+            print("Saving synapses...")
+            np.save("weight_1.npy", brain.weight_1)
+            np.save("weight_2.npy", brain.weight_2)
+            np.save("weight_3.npy", brain.weight_3)
+            np.save("weight_4.npy", brain.weight_4)
+            np.save("weight_5.npy", brain.weight_5)
+            np.save("bias_1.npy", brain.bias_1)
+            np.save("bias_2.npy", brain.bias_2)
+            np.save("bias_3.npy", brain.bias_3)
+            np.save("bias_4.npy", brain.bias_4)
+            np.save("bias_5.npy", brain.bias_5)
+
     print("--FINISH TRAINING--")
 
 #save nn information

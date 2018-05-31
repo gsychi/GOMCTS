@@ -15,6 +15,7 @@ class NeuralNetwork:
 
         self.X = X
         self.y = y
+        self.momentum = 0.8
 
         # define weight and bias for input -> hidden and hidden -> input
         self.weight_1 = np.random.uniform(-1.0, 1.0, (len(self.X[0]), self.hiddenNodes))
@@ -27,6 +28,11 @@ class NeuralNetwork:
         self.bias_3 = np.random.random((1, self.hiddenNodes))
         self.bias_4 = np.random.random((1, self.hiddenNodes))
         self.bias_5 = np.random.random((1, len(self.y[0])))
+        self.lastWeights1 = np.zeros((len(self.X[0]), self.hiddenNodes))
+        self.lastWeights2 = np.zeros((self.hiddenNodes, self.hiddenNodes))
+        self.lastWeights3 = np.zeros((self.hiddenNodes, self.hiddenNodes))
+        self.lastWeights4 = np.zeros((self.hiddenNodes, self.hiddenNodes))
+        self.lastWeights5 = np.zeros((self.hiddenNodes, len(self.y[0])))
 
     def trainNetwork(self, val, alpha):
 
@@ -52,11 +58,11 @@ class NeuralNetwork:
             inp_delta = hid_delta.dot(self.weight_2.T) * (inp * (1 - inp))
 
 
-            self.weight_5 += (fin_delta.T.dot(hid3)).T * alpha
-            self.weight_4 += (hid3_delta.T.dot(hid2)).T * alpha
-            self.weight_3 += (hid2_delta.T.dot(hid)).T * alpha
-            self.weight_2 += (hid_delta.T.dot(inp)).T * alpha
-            self.weight_1 += (inp_delta.T.dot(self.X)).T * alpha
+            self.weight_5 += ((fin_delta.T.dot(hid3)).T + self.lastWeights5) * alpha
+            self.weight_4 += ((hid3_delta.T.dot(hid2)).T + self.lastWeights4) * alpha
+            self.weight_3 += ((hid2_delta.T.dot(hid)).T + self.lastWeights3) * alpha
+            self.weight_2 += ((hid_delta.T.dot(inp)).T + self.lastWeights2) * alpha
+            self.weight_1 += ((inp_delta.T.dot(self.X)).T + self.lastWeights1) * alpha
 
             self.bias_5 += fin_delta.sum(axis=0) * alpha
             self.bias_4 += hid3_delta.sum(axis=0) * alpha
@@ -64,6 +70,12 @@ class NeuralNetwork:
             self.bias_2 += hid_delta.sum(axis=0) * alpha
             self.bias_1 += inp_delta.sum(axis=0) * alpha
 
+            #update last weights
+            self.lastWeights5 = (fin_delta.T.dot(hid3)).T * self.momentum
+            self.lastWeights4 = (hid3_delta.T.dot(hid2)).T * self.momentum
+            self.lastWeights3 = (hid2_delta.T.dot(hid)).T * self.momentum
+            self.lastWeights2 = (hid_delta.T.dot(inp)).T * self.momentum
+            self.lastWeights1 = (inp_delta.T.dot(self.X)).T * self.momentum
 
     def predict(self, input):
         updated_inp = 1 / (1 + np.exp(-(np.dot(input, self.weight_1)+self.bias_1)))
